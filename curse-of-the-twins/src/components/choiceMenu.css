@@ -1,0 +1,33 @@
+.choice-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+  
+  .choice-button {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .choice-button:hover {
+    background-color: #ddd;
+  }
+  
+  .selected {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
