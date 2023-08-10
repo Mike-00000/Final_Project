@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './introduction.css';
 import illustration1 from '../images/parchment-intro.jpg';
 import illustration2 from '../images/forest-cabin.jpg';
@@ -7,6 +7,8 @@ import illustration4 from '../images/bandits-attack-father.jpg';
 import illustration5 from '../images/hidden-girl.jpg';
 import illustration6 from '../images/girl-escape.jpg';
 import { animateScroll as scroll } from 'react-scroll';
+// import { handleNextComponent } from '../App';
+import { AppContext } from '../App';
 
 const backgroundIllustration = illustration1;
 
@@ -20,16 +22,17 @@ const illustrations = [
 
 const charactersPerFrameArray = [50, 30, 20]; 
 
-const Introduction = () => {
+const Introduction = (props) => {
+  console.log("Introduction props", props);
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentIllustration, setCurrentIllustration] = useState(illustrations[0]);
   const [introductionPassages, setIntroductionPassages] = useState([]);
   const [passageId, setPassageId] = useState(1);
-  const [showNextButton, setShowNextButton] = useState(false);
+  const [showNextButton, setShowNextButton] = useState(true);
 
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
-
+  const { handleNextComponent, passageIdfordb } = useContext(AppContext);
   const formatTextWithLineBreaks = (text) => {
     const formattedText = text.replace(/<br>/g, '<br />');
     return formattedText;
@@ -40,7 +43,7 @@ const Introduction = () => {
   useEffect(() => {
     const fetchIntroductionPassages = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/passages`);
+        const response = await fetch(`http://localhost:3000/passages/${passageIdfordb}`);
         const data = await response.json();
 
         if (Array.isArray(data)) {
@@ -73,7 +76,7 @@ const Introduction = () => {
             setPassageId((prevPassageId) => prevPassageId + 1);
           }, 6700);
         } else {
-          setShowNextButton(true); // Afficher le bouton "Next" après la fin de l'introduction
+          setShowNextButton(false); // Afficher le bouton "Next" après la fin de l'introduction
         }
       }
     }, 75);
@@ -91,7 +94,7 @@ const Introduction = () => {
       <div className="text-container">
         <div className="parchment aaa" id="parchment-id" ref={textRef}>
           <p className="text"  dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(displayText)   }} />
-        {showNextButton && <button className="next-button">Next</button>} {/* Afficher le bouton seulement si showNextButton est vrai */}
+        {showNextButton && <button onClick= {handleNextComponent} className="next-button">Next</button>} {/* Afficher le bouton seulement si showNextButton est vrai */}
         </div>
       </div>
       

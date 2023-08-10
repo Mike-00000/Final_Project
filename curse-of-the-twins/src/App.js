@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, createContext } from 'react';
 import Home from './components/Home';
 import Introduction from './components/Introduction';
 import PassageWindow from './components/PassageWindow';
 import ChoiceMenu from './components/ChoiceMenu';
 
+export const AppContext=createContext("")
+
 const App = () => {
   const [currentComponent, setCurrentComponent] = useState('Home');
-  const [passageId, setPassageId] = useState(1);
+  const [passageIdfordb, setPassageIdfordb] = useState(0);
+  const [passageId, setPassageId] = useState(0);
 
   // Define your choices array with appropriate data
   const yourChoicesArray = [
@@ -16,15 +19,19 @@ const App = () => {
   ];
 
   const handleNextComponent = () => {
-    if (currentComponent === 'Home') {
-      setCurrentComponent('Introduction');
-    } else if (currentComponent === 'Introduction') { 
-      setCurrentComponent('PassageWindow');
-    } else if (currentComponent === 'PassageWindow') {
-      setCurrentComponent('ChoiceMenu');
-    } else {
+    console.log("testttttttttttttttttttttt", currentComponent);
+    // if (currentComponent === 'Home') {
+    //   setCurrentComponent('Introduction');
+    // } else if (currentComponent === 'Introduction') { 
+    //   setCurrentComponent('PassageWindow');
+    // } else if (currentComponent === 'PassageWindow') {
+    //   setCurrentComponent('ChoiceMenu');
+    // } else {
 
-    }
+    // }
+    setPassageId(0)
+    setPassageIdfordb(passageIdfordb+1)
+    setCurrentComponent('PassageWindow');
   };
 
   const handleOptionSelected = (selectedChoice) => {
@@ -36,16 +43,18 @@ const App = () => {
   };
 
   return (
+    <AppContext.Provider value={{handleNextComponent,passageIdfordb, setPassageIdfordb,passageId, setPassageId}}>
     <div className="App">
-      {currentComponent === 'Home' && <Home onNext={handleNextComponent} />}
-      {currentComponent === 'Introduction' && <Introduction onNext={handleNextComponent} />}
+      {currentComponent === 'Home' && <Home onNext={handleNextComponent} key={1}/>}
+      {currentComponent === 'Introduction' && <Introduction handleNextComponent={handleNextComponent} key={2}/>}
       {currentComponent === 'PassageWindow' && (
-        <PassageWindow passageId={passageId} onNextPassage={handleNextComponent} />
+        <PassageWindow passageId={passageId} onNextPassage={handleNextComponent} key={3}/>
       )}
       {currentComponent === 'ChoiceMenu' && (
-        <ChoiceMenu choices={yourChoicesArray} onOptionSelected={handleOptionSelected} />
+        <ChoiceMenu choices={yourChoicesArray} onOptionSelected={handleOptionSelected} key={4}/>
       )}
   </div>
+  </AppContext.Provider>
   );
 };
 

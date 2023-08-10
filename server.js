@@ -78,9 +78,10 @@ app.get('/passages', async (req, res) => {
   // Récupérer un passage par son ID
   app.get('/passages/:id', async (req, res) => {
     const { id } = req.params;
+    console.log(req.params);
     try {
-      const passage = await db('passages_table').where({ id }).first();
-      if (!passage) {
+      const passage = await db('passages_table').where({ passage_id:id }).orderBy("order_number")
+      if (passage.length===0) {
         return res.status(404).json({ error: 'Passage not found' });
       }
       res.json(passage);

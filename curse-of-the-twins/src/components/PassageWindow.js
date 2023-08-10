@@ -1,73 +1,111 @@
-import React, { useState, useEffect } from 'react';
-import './passageWindow.css'; // Assurez-vous d'avoir le bon chemin vers votre fichier CSS
+import React, { useState, useEffect, useContext } from 'react';
+import './passageWindow.css';
+import illustration1 from '../images/girl-sleeping.jpg';
+import illustration2 from '../images/girl-awaken.jpg';
 import { animateScroll as scroll } from 'react-scroll';
+import { AppContext } from '../App';
 
-const PassageWindow = ({ passage, onNextPassage }) => {
+const illustrations = [
+  illustration1,
+  illustration2,
+];
+
+const charactersPerFrameArray = [100];
+
+const PassageWindow = ({ passageId,onNextPassage }) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isButtonVisible, setIsButtonVisible] = useState(false);
-  // const [choices, setChoices] = useState([]);
+  const [currentIllustration, setCurrentIllustration] = useState(illustrations[0]);
+  const [introductionPassages, setIntroductionPassages] = useState([]);
+  const [showNextButton, setShowNextButton] = useState(true);
+  const { handleNextComponent, passageIdfordb } = useContext(AppContext);
+  // const [passageId, setPassageId] = useState(0);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+
+  const yourChoicesArray = [
+    { choice_id: 1, text: 'Choice 1', nextPassageId: 2 },
+    { choice_id: 2, text: 'Choice 2', nextPassageId: 3 },
+  ];
 
   const formatTextWithLineBreaks = (text) => {
     const formattedText = text.replace(/<br>/g, '<br />');
     return formattedText;
   };
 
-  const handleChoiceSelection = (choiceIndex) => {
-    // const selectedChoice = choices[choiceIndex];
-    // onNextPassage(selectedChoice.next_passage_id);
-  };
+  const textRef = React.useRef(null);
 
-  const handleNext = () => {
-    console.log("Next button clicked"); // Ajoutez ce log pour vérifier si la fonction est appelée
-    setDisplayText('');
-    setCurrentIndex(0);
-    setIsButtonVisible(false);
-    // onNextPassage(passage.next_passage_id); // Passage suivant défini dans le choix précédent
-    onNextPassage(); // Appeler la fonction pour passer au prochain passage
-
+  const handleNextStep = () => {
+    if (currentIndex < introductionPassages[passageId - 1].steps.length - 1) {
+      setCurrentIndex((prevIndex) => prevIndex + 1);
+    } else {
+      onNextPassage(yourChoicesArray[passageId - 1].nextPassageId);
+    }
   };
 
   useEffect(() => {
-    // setChoices(passage.choices);
-  }, [passage]);
+    const fetchIntroductionPassages = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/passages/${passageIdfordb}`);
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          console.log("dddddd",data);
+          setIntroductionPassages(data);
+        }
+      } catch (error) {
+        console.error('Error fetching introduction passages:', error);
+      }
+    };
+
+    fetchIntroductionPassages();
+  }, []);
 
   useEffect(() => {
+    const passageText = introductionPassages?.find((passage) => passage.id === passageId)?.passage_text || '';
+    console.log('introductionPassages[passageId]',introductionPassages[passageId]);
     const intervalId = setInterval(() => {
-      if (currentIndex < passage.passage_text.length) {
-        setDisplayText((prevText) => prevText + passage.passage_text[currentIndex]);
+      const charactersPerFrame = charactersPerFrameArray.find((value, index) => index === passageId - 1) || 100;
+      console.log("passageText=>",passageText,passageId);
+      if (currentIndex < passageText.length) {
+        setDisplayText((prevText) => prevText + passageText[currentIndex]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
       } else {
         clearInterval(intervalId);
-        setIsButtonVisible(true);
+        if (currentIllustration !== illustrations[illustrations.length - 1]) {
+          setTimeout(() => {
+            const currentIllustrationIndex = illustrations.indexOf(currentIllustration);
+            setCurrentIllustration(illustrations[currentIllustrationIndex + 1]);
+            setCurrentIndex(0);
+            setDisplayText('');
+            onNextPassage(yourChoicesArray[passageId].nextPassageId);
+          }, 6700);
+        } else {
+          setShowNextButton(true);
+        }
       }
     }, 75);
 
     return () => clearInterval(intervalId);
-  }, [currentIndex, passage.passage_text]);
+  }, [passageId, currentIndex ]);
 
   useEffect(() => {
     scroll.scrollToBottom();
+  }, [currentIndex]);
+
+  useEffect(() => {
+    textRef.current.scrollTop = textRef.current.scrollHeight;
   }, [displayText]);
 
   return (
-    <div className="passage-container">
-      <div className="passage-text">
-        <p dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(displayText) }} />
-      </div>
-      {isButtonVisible && (
-        <button className="next-button" onClick={handleNext}>Next</button>
-      )}
-      {/* {choices.length > 0 && (
-        <div className="choices">
-          {choices.map((choice, index) => (
-            <button key={index} onClick={() => handleChoiceSelection(index)}>
-              {choice.text}
-            </button>
-          ))}
+    <div className="container">
+      <div className="illustration-container" style={{ backgroundImage: `url(${currentIllustration})` }} />
+      <div className="text-container">
+        <div className="parchment aaa" id="parchment-id" ref={textRef}>
+          <p className="text" dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(displayText) }} />
+          {showNextButton && <button onClick={handleNextStep} className="next-button">Next</button>}
         </div>
-      )} */}
-      
+      </div>
+      <audio src="/Secret of the Forest.mp3" autoPlay={isMusicPlaying} />
     </div>
   );
 };
