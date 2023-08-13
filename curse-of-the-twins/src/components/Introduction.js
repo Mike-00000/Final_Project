@@ -94,10 +94,9 @@ const Introduction = (props) => {
       <div className="text-container">
         <div className="parchment aaa" id="parchment-id" ref={textRef}>
           <p className="text"  dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(displayText)   }} />
-        {showNextButton && <button onClick= {handleNextComponent} className="next-button">Next</button>} {/* Afficher le bouton seulement si showNextButton est vrai */}
+        {showNextButton && <button onClick= {handleNextComponent} className="next-button">Next</button>}
         </div>
       </div>
-      
       <audio src="/RPG intro 100 BPM2.wav" autoPlay={isMusicPlaying} />
     </div>
   );

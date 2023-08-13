@@ -1,4 +1,4 @@
-.passage-container {
+/* .passage-container {
     position: relative;
     width: 100%;
     height: 100%;
@@ -22,7 +22,97 @@
   .text2 {
     margin: 0;
     padding: 0;
-  }
+  } */
   
   /* Add any additional styling for your passage window here */
   
+/* ____________________________________________________________________________ */
+
+.container2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 88vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+  }
+
+/* .aaa::-webkit-scrollbar {
+  display: none;
+}
+.aaa {
+  overflow-y: scroll;
+} */
+
+.illustration-container2 {
+  flex: 1;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+} 
+
+.text-container2 {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  /* font-family: 'Dancing Script', cursive; */
+}
+
+.parchment2 {
+  background-image: url(../images/parchment-intro.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 80px;
+  width: 60%;
+  height: 70%; 
+  /* font-family: 'Dancing Script', cursive; */
+}
+
+.text2 {
+  font-size: 30px;
+  line-height: 1.5;
+  font-family: serif;
+  color: #000000; 
+  font-family: 'Dancing Script', cursive;
+}
+
+.next-button2 {
+  background-color: #c59e34;
+  color: rgb(0, 0, 0);
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.next-button2:hover {
+  background-color: #881010;
+  color: white;
+}
+
+/* .text-placeholder {
+  font-size: 30px;
+  line-height: 1.5;
+  font-family: serif;
+  color: #000000;
+  font-family: 'Dancing Script', cursive;
+} */

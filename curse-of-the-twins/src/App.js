@@ -36,7 +36,7 @@ const App = () => {
 
   const handleOptionSelected = (selectedChoice) => {
     
-    setPassageId(selectedChoice.nextPassageId);
+    setPassageIdfordb(selectedChoice.nextPassageId);
     console.log("New passageId:", selectedChoice.nextPassageId); // Ajoutez ce log pour vérifier la mise à jour du passageId
     setCurrentComponent('PassageWindow'); 
     console.log("Option sélectionnée :", selectedChoice.text);
