@@ -10,6 +10,12 @@ const illustrations = [
   illustration2,
 ];
 
+const formatTextWithLineBreaks = (text) => {
+  const formattedText = text.replace(/<br>/g, '<br />');
+  return formattedText;
+};
+
+
 const PassageWindow = ({ passageId2 }) => {
   const [textPassages, setTextPassages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,18 +23,22 @@ const PassageWindow = ({ passageId2 }) => {
   const [displayText, setDisplayText] = useState('');
   const textRef = useRef(null);
   const textIndexRef = useRef(0);  // Référence pour le textIndex
+  const [isTextComplete, setIsTextComplete] = useState(false);
+
 
   useEffect(() => {
     const timer = setInterval(() => {
       if (currentPassage && textIndexRef.current <= currentPassage.passage_text.length-1) {
         setDisplayText(prevDisplayText => {
-          return prevDisplayText + currentPassage.passage_text[textIndexRef.current-1]
-        });
+          const charToAdd = currentPassage.passage_text[textIndexRef.current-1];
+          return formatTextWithLineBreaks(prevDisplayText + charToAdd);
+      });      
         textIndexRef.current++;
       } else {
+        setIsTextComplete(true);
         clearInterval(timer);
       }
-    }, 100);  // Vitesse d'affichage du texte.
+    }, 50);  // Vitesse d'affichage du texte.
 
     return () => {
       textIndexRef.current = 0;  // Réinitialisation de l'index de texte lors du nettoyage
@@ -47,9 +57,9 @@ const PassageWindow = ({ passageId2 }) => {
       try {
         const response = await fetch(`http://localhost:3000/passages`);
         const allData = await response.json();
-        console.log(allData)
+        // console.log(allData)
         const filteredData = allData.filter(passage => passage.id >= 6 && passage.id <= 13);
-        console.log(filteredData);
+        // console.log(filteredData);
         filteredData.sort((a,b)=> a.id - b.id)
         setTextPassages(filteredData);
       } catch (error) {
@@ -61,6 +71,7 @@ const PassageWindow = ({ passageId2 }) => {
 
   const handleNext = () => {
     setDisplayText('');
+    setIsTextComplete(false);
     if (currentIndex < textPassages.length - 1) {
       setCurrentIndex(prevIndex => prevIndex + 1);
     } else {
@@ -73,8 +84,8 @@ const PassageWindow = ({ passageId2 }) => {
       <div className="illustration-container2" style={{ backgroundImage: `url(${illustration2})` }}></div>
       <div className="text-container2">
         <div className="parchment2 aaa2" id="parchment-id" ref={textRef}>
-          <p className="text2">{displayText}</p>
-          <button onClick={handleNext}>Next</button>
+        <p className="text2" dangerouslySetInnerHTML={{ __html: displayText }}></p>
+        {isTextComplete && <button onClick={handleNext} className="next-button2">Next</button>}
         </div>
       </div>
     </div>
