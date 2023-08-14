@@ -28,7 +28,7 @@
   
 /* ____________________________________________________________________________ */
 
-.container2 {
+.passage-window {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,19 +48,19 @@
     text-align: center;
   }
 
-/* .aaa::-webkit-scrollbar {
+.aaa2::-webkit-scrollbar {
   display: none;
 }
-.aaa {
+.aaa2 {
   overflow-y: scroll;
-} */
+}
 
 .illustration-container2 {
   flex: 1;
   height: 100%;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
 } 
 
 .text-container2 {

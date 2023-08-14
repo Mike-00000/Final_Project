@@ -10,6 +10,8 @@ const App = () => {
   const [currentComponent, setCurrentComponent] = useState('Home');
   const [passageIdfordb, setPassageIdfordb] = useState(0);
   const [passageId, setPassageId] = useState(0);
+  const [passageId2, setPassageId2] = useState(0);
+
 
   // Define your choices array with appropriate data
   const yourChoicesArray = [
@@ -43,12 +45,12 @@ const App = () => {
   };
 
   return (
-    <AppContext.Provider value={{handleNextComponent,passageIdfordb, setPassageIdfordb,passageId, setPassageId}}>
+    <AppContext.Provider value={{handleNextComponent,passageIdfordb, setPassageIdfordb,passageId, setPassageId, passageId2, setPassageId2}}>
     <div className="App">
       {currentComponent === 'Home' && <Home onNext={handleNextComponent} key={1}/>}
       {currentComponent === 'Introduction' && <Introduction handleNextComponent={handleNextComponent} key={2}/>}
       {currentComponent === 'PassageWindow' && (
-        <PassageWindow passageId={passageId} onNextPassage={handleNextComponent} key={3}/>
+        <PassageWindow passageId2={passageId2} onNextPassage={handleNextComponent} key={3}/>
       )}
       {currentComponent === 'ChoiceMenu' && (
         <ChoiceMenu choices={yourChoicesArray} onOptionSelected={handleOptionSelected} key={4}/>

@@ -76,7 +76,7 @@ const Introduction = (props) => {
             setPassageId((prevPassageId) => prevPassageId + 1);
           }, 6700);
         } else {
-          setShowNextButton(true); // Afficher le bouton "Next" après la fin de l'introduction
+          setShowNextButton(false); // Afficher le bouton "Next" après la fin de l'introduction
         }
       }
     }, 75);
@@ -94,9 +94,10 @@ const Introduction = (props) => {
       <div className="text-container">
         <div className="parchment aaa" id="parchment-id" ref={textRef}>
           <p className="text"  dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(displayText)   }} />
-        {showNextButton && <button onClick= {handleNextComponent} className="next-button">Next</button>}
+        {showNextButton && <button onClick= {handleNextComponent} className="next-button">Next</button>} {/* Afficher le bouton seulement si showNextButton est vrai */}
         </div>
       </div>
+      
       <audio src="/RPG intro 100 BPM2.wav" autoPlay={isMusicPlaying} />
     </div>
   );

@@ -1,116 +1,84 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './passageWindow.css';
 import illustration1 from '../images/girl-sleeping.jpg';
 import illustration2 from '../images/girl-awaken.jpg';
+import illustration3 from '../images/parchment-intro.jpg';
 import { animateScroll as scroll } from 'react-scroll';
-import { AppContext } from '../App';
-
-
 
 const illustrations = [
   illustration1,
   illustration2,
 ];
 
-const testPassages = [
-  {
-      id: 1,
-      passage_text: "Exemple de texte à afficher."
-  }
-];
-
-const PassageWindow = ({ passageId, onNextPassage }) => {
-  console.log("Passage ID at render:", passageId);
-
-  console.log("Current passageId:", passageId);
-  const [displayText, setDisplayText] = useState('Texte initial');
+const PassageWindow = ({ passageId2 }) => {
+  const [textPassages, setTextPassages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [currentIllustration, setCurrentIllustration] = useState(illustrations[0]);
-  const [textPassages, settextPassages] = useState([]);
-  const [showNextButton, setShowNextButton] = useState(true);
-  const { handleNextComponent, passageIdfordb } = useContext(AppContext);
+  const currentPassage = textPassages[currentIndex];
+  const [displayText, setDisplayText] = useState('');
+  const textRef = useRef(null);
+  const textIndexRef = useRef(0);  // Référence pour le textIndex
 
-  const yourChoicesArray = [
-    { choice_id: 1, text: 'Choice 1', nextPassageId: 2 },
-    { choice_id: 2, text: 'Choice 2', nextPassageId: 3 },
-  ];
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (currentPassage && textIndexRef.current <= currentPassage.passage_text.length-1) {
+        setDisplayText(prevDisplayText => {
+          return prevDisplayText + currentPassage.passage_text[textIndexRef.current-1]
+        });
+        textIndexRef.current++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 100);  // Vitesse d'affichage du texte.
 
-  const formatTextWithLineBreaks = (text) => {
-    return text.replace(/<br>/g, '<br />');
-  };
+    return () => {
+      textIndexRef.current = 0;  // Réinitialisation de l'index de texte lors du nettoyage
+      clearInterval(timer);
+    };
+  }, [currentPassage]);
 
-  const textRef = React.useRef(null);
-
-  const handleNextStep = () => {
-    if (currentIndex < textPassages[passageId].steps.length - 1) {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-      console.log("Current value of passageId after clicking the button:", passageId);
-    } else {
-      onNextPassage(yourChoicesArray[passageIdfordb - 1].nextPassageId);
+  useEffect(() => {
+    if (textRef.current) {
+      textRef.current.scrollTop = textRef.current.scrollHeight;
     }
-  };
+  }, [displayText]);
 
   useEffect(() => {
     const fetchPassages = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/passages/${passageIdfordb}`);
-        const data = await response.json();
-        console.log("Data from server:", data);
-        if (Array.isArray(data)) {
-          settextPassages(data);
-        } else {
-          settextPassages([data]);
-        }
+        const response = await fetch(`http://localhost:3000/passages`);
+        const allData = await response.json();
+        console.log(allData)
+        const filteredData = allData.filter(passage => passage.id >= 6 && passage.id <= 13);
+        console.log(filteredData);
+        filteredData.sort((a,b)=> a.id - b.id)
+        setTextPassages(filteredData);
       } catch (error) {
         console.error('Error fetching text passages:', error);
-      } console.log("Data retrieved from server (textPassages):", textPassages);
+      }
     };
-
     fetchPassages();
-  }, [passageIdfordb]);
+  }, []);
 
-  useEffect(() => {
-    if (textPassages.length > 0) {
-      const passageText = textPassages.find(passage => passage.passage_id === passageId)?.passage_text || '';
-      console.log("Value of passageText based on current passageId:", passageText);
-      setDisplayText(passageText);
+  const handleNext = () => {
+    setDisplayText('');
+    if (currentIndex < textPassages.length - 1) {
+      setCurrentIndex(prevIndex => prevIndex + 1);
+    } else {
+      // Gérez ce qui se passe à la fin des passages (aller à un autre écran, etc.)
     }
-  }, [textPassages, passageId]);
-
-  useEffect(() => {
-    scroll.scrollToBottom();
-  }, [currentIndex]);
-
-  useEffect(() => {
-    textRef.current.scrollTop = textRef.current.scrollHeight;
-  }, [displayText]);
-
-  // console.log("Display text:", displayText);
-
-
-  // console.log("textPassages state:", textPassages);
-
-  // console.log('Value of displayText:', displayText);
-
+  };
 
   return (
-    <div className="container2">
-      <div className="illustration-container2" style={{ backgroundImage: `url(${currentIllustration})` }} />
+    <div className="passage-window">
+      <div className="illustration-container2" style={{ backgroundImage: `url(${illustration2})` }}></div>
       <div className="text-container2">
-        <div className="parchment2 aaa2" id="parchment-id2" ref={textRef}>
-          
-          <p className="text2">Test text</p>
-          <p className="text">{testPassages[0].passage_text}</p>
+        <div className="parchment2 aaa2" id="parchment-id" ref={textRef}>
           <p className="text2">{displayText}</p>
-          <p className="text2"  dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(displayText)   }} />
-          {showNextButton && <button onClick={handleNextStep} className="next-button2">Next</button>}
-          <button onClick={() => setDisplayText('Texte modifié')}>Changer le texte</button>
-
+          <button onClick={handleNext}>Next</button>
         </div>
       </div>
-      <audio src="/Secret of the Forest.mp3" autoPlay />
     </div>
   );
-};
+}
 
 export default PassageWindow;

@@ -1,44 +1,46 @@
 import React, { useState, useEffect, useContext } from 'react';
-import './introduction.css';
-import illustration1 from '../images/parchment-intro.jpg';
-import illustration2 from '../images/forest-cabin.jpg';
-import illustration3 from '../images/loan_shark-and-father.jpg';
-import illustration4 from '../images/bandits-attack-father.jpg';
-import illustration5 from '../images/hidden-girl.jpg';
-import illustration6 from '../images/girl-escape.jpg';
+import './passageWindow.css';
+import illustration1 from '../images/girl-sleeping.jpg';
+import illustration2 from '../images/girl-awaken.jpg';
 import { animateScroll as scroll } from 'react-scroll';
-// import { handleNextComponent } from '../App';
 import { AppContext } from '../App';
 
-const backgroundIllustration = illustration1;
-
 const illustrations = [
+  illustration1,
   illustration2,
-  illustration3,
-  illustration4,
-  illustration5,
-  illustration6,
 ];
 
-const charactersPerFrameArray = [50, 30, 20]; 
+const charactersPerFrameArray = [100];
 
-const Introduction = (props) => {
-  console.log("Introduction props", props);
+const PassageWindow = ({ passageId,onNextPassage }) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentIllustration, setCurrentIllustration] = useState(illustrations[0]);
   const [introductionPassages, setIntroductionPassages] = useState([]);
-  const [passageId, setPassageId] = useState(1);
   const [showNextButton, setShowNextButton] = useState(true);
-
-  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
   const { handleNextComponent, passageIdfordb } = useContext(AppContext);
+  // const [passageId, setPassageId] = useState(0);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+
+  const yourChoicesArray = [
+    { choice_id: 1, text: 'Choice 1', nextPassageId: 2 },
+    { choice_id: 2, text: 'Choice 2', nextPassageId: 3 },
+  ];
+
   const formatTextWithLineBreaks = (text) => {
     const formattedText = text.replace(/<br>/g, '<br />');
     return formattedText;
   };
 
   const textRef = React.useRef(null);
+
+  const handleNextStep = () => {
+    if (currentIndex < introductionPassages[passageId - 1].steps.length - 1) {
+      setCurrentIndex((prevIndex) => prevIndex + 1);
+    } else {
+      onNextPassage(yourChoicesArray[passageId - 1].nextPassageId);
+    }
+  };
 
   useEffect(() => {
     const fetchIntroductionPassages = async () => {
@@ -47,6 +49,7 @@ const Introduction = (props) => {
         const data = await response.json();
 
         if (Array.isArray(data)) {
+          console.log("dddddd",data);
           setIntroductionPassages(data);
         }
       } catch (error) {
@@ -55,13 +58,14 @@ const Introduction = (props) => {
     };
 
     fetchIntroductionPassages();
-  }, [passageId]);
+  }, []);
 
   useEffect(() => {
     const passageText = introductionPassages?.find((passage) => passage.id === passageId)?.passage_text || '';
-
+    console.log('introductionPassages[passageId]',introductionPassages[passageId]);
     const intervalId = setInterval(() => {
       const charactersPerFrame = charactersPerFrameArray.find((value, index) => index === passageId - 1) || 100;
+      console.log("passageText=>",passageText,passageId);
       if (currentIndex < passageText.length) {
         setDisplayText((prevText) => prevText + passageText[currentIndex]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
@@ -73,33 +77,37 @@ const Introduction = (props) => {
             setCurrentIllustration(illustrations[currentIllustrationIndex + 1]);
             setCurrentIndex(0);
             setDisplayText('');
-            setPassageId((prevPassageId) => prevPassageId + 1);
+            onNextPassage(yourChoicesArray[passageId].nextPassageId);
           }, 6700);
         } else {
-          setShowNextButton(true); // Afficher le bouton "Next" après la fin de l'introduction
+          setShowNextButton(true);
         }
       }
     }, 75);
 
     return () => clearInterval(intervalId);
-  }, [currentIndex, currentIllustration, introductionPassages, passageId]);
+  }, [passageId, currentIndex ]);
 
-  useEffect(()=> {
-    textRef.current.scrollTop = textRef.current.scrollHeight
-  },[displayText])
+  useEffect(() => {
+    scroll.scrollToBottom();
+  }, [currentIndex]);
+
+  useEffect(() => {
+    textRef.current.scrollTop = textRef.current.scrollHeight;
+  }, [displayText]);
 
   return (
     <div className="container">
-      <div className="illustration-container" style={{ backgroundImage: `url(${currentIllustration})` }} />
+      <div className="illustration-container2" style={{ backgroundImage: `url(${currentIllustration})` }} />
       <div className="text-container">
         <div className="parchment aaa" id="parchment-id" ref={textRef}>
-          <p className="text"  dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(displayText)   }} />
-        {showNextButton && <button onClick= {handleNextComponent} className="next-button">Next</button>}
+          <p className="text" dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(displayText) }} />
+          {showNextButton && <button onClick={handleNextStep} className="next-button">Next</button>}
         </div>
       </div>
-      <audio src="/RPG intro 100 BPM2.wav" autoPlay={isMusicPlaying} />
+      <audio src="/Mars Village - Moderate.mp3" autoPlay={isMusicPlaying} />
     </div>
   );
 };
 
-export default Introduction;
+export default PassageWindow;
