@@ -13,7 +13,7 @@ const illustrations = [
 
 const formatTextWithLineBreaks = (text) => {
   let formattedText = text.replace(/<br>/g, '<br />');
-  formattedText = text.replace(/#/g, '5555');
+  // formattedText = text.replace(/#/g, '');
   return formattedText;
 };
 // _________________________________________________________________
@@ -35,12 +35,14 @@ const PassageWindow = ({ passageId2 }) => {
         // hashText.current = false
         setDisplayText(prevDisplayText => {
           const charToAdd = currentPassage.passage_text[textIndexRef.current-1];
-          if(charToAdd === '#') {
-            setIsTextComplete(true)
-            clearInterval(timer);
-            // hashText.current = true
-          } 
+          // if(charToAdd === '#') {
+          //   setIsTextComplete(true)
+          //   clearInterval(timer);
+          //   // hashText.current = true
+          // } 
+          
           return formatTextWithLineBreaks(prevDisplayText + charToAdd);
+          
       }); 
     
         textIndexRef.current++;
@@ -57,6 +59,7 @@ const PassageWindow = ({ passageId2 }) => {
       clearInterval(timer);
     };
   }, [currentPassage]);
+
 
   useEffect(() => {
     if (textRef.current) {
@@ -83,7 +86,7 @@ const PassageWindow = ({ passageId2 }) => {
 
   const handleNext = () => {
     setDisplayText('');
-    setIsTextComplete(false);
+    setIsTextComplete(true);
     // if(hashText.current) {
     //   // hashText.current = false
     //   // return
@@ -104,7 +107,7 @@ const PassageWindow = ({ passageId2 }) => {
       <div className="illustration-container2" style={{ backgroundImage: `url(${illustration2})` }}></div>
       <div className="text-container2">
         <div className="parchment2 aaa2" id="parchment-id" ref={textRef}>
-        <p className="text2" dangerouslySetInnerHTML={{ __html: displayText }}></p>
+        <p className={`text2 ${currentPassage?.passage_type === 'thought' ? 'italic-text' : ''}`} dangerouslySetInnerHTML={{ __html: displayText }}></p>
         {isTextComplete && <button onClick={handleNext} className="next-button2">Next</button>}
         </div>
       </div>

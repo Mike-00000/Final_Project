@@ -91,7 +91,11 @@
   line-height: 1.5;
   font-family: serif;
   color: #000000; 
-  font-family: 'Dancing Script', cursive;
+  /* font-family: 'Dancing Script', cursive; */
+}
+
+.italic-text {
+  font-style: italic;
 }
 
 .next-button2 {
