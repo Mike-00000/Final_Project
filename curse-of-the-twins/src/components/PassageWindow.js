@@ -2,10 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 import "./passageWindow.css";
 import illustration1 from "../images/girl-sleeping.jpg";
 import illustration2 from "../images/girl-awaken.jpg";
-import illustration3 from "../images/parchment-intro.jpg";
+import illustration3 from "../images/forest.jpg";
+import illustration4 from "../images/girl-sees-boy.jpg";
+import illustration5 from "../images/tavern.jpg";
 // import { animateScroll as scroll } from 'react-scroll';
 
-const illustrations = [illustration1, illustration2];
+// const illustrations = [illustration1, illustration2];
+
+const illustrationsMap = {
+  6: illustration1,
+  7: illustration2,
+  10: illustration3,
+  12: illustration4,
+  20: illustration5,
+};
+
 
 const ENDING_PASSAGE_IDS = [89, 112, 128, 146]; // Ajoutez tous les ID de passages de fin
 
@@ -46,6 +57,8 @@ const PassageWindow = ({ passageId2 }) => {
   const textIndexRef = useRef(0); // Référence pour le textIndex
   const [isTextComplete, setIsTextComplete] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const [currentIllustration, setCurrentIllustration] = useState(illustration1); // Image initiale par défaut.
+
   // const hashText = useRef(false)
   const [isAtEndOfPassages, setIsAtEndOfPassages] = useState(false);
   useEffect(() => {
@@ -141,6 +154,13 @@ useEffect(() => {
   const [choices, setChoices] = useState([]);
 
   useEffect(() => {
+    if (illustrationsMap[currentPassage?.id]) {
+      setCurrentIllustration(illustrationsMap[currentPassage?.id]);
+    }
+  }, [currentPassage?.id]);
+  
+
+  useEffect(() => {
     if (isAtEndOfPassages) {
       const fetchChoices = async () => {
         const choiceIdsToFetch = determineChoicesToFetch(currentPassage?.id);
@@ -221,7 +241,7 @@ useEffect(() => {
     <div className="passage-window">
       <div
         className="illustration-container2"
-        style={{ backgroundImage: `url(${illustration2})` }}
+        style={{ backgroundImage: `url(${currentIllustration})` }}
       ></div>
       <div className="text-container2">
         <div className="parchment2 aaa2" id="parchment-id" ref={textRef}>
