@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import './home.css';
 import Introduction from './Introduction'; 
+
 
 const Home = () => {
   const [loginUsername, setLoginUsername] = useState('');
@@ -10,6 +12,8 @@ const Home = () => {
   const [isNewGame, setNewGame] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(true); // Initialisation à true
   const [showIntroduction, setShowIntroduction] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,9 +29,8 @@ const Home = () => {
         }),
       });
   
-      if (response.status == 200) {
-        console.log(response);
-        setIsAuthenticated(false);
+      if (response.status === 200) {
+        setIsLoggedIn(true);
       } else {
         alert('Authentication failed. Please try again.');
       }
@@ -36,7 +39,6 @@ const Home = () => {
     }
   };
   
-
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -53,7 +55,7 @@ const Home = () => {
       });
   
       if (response.ok) {
-        setIsAuthenticated(true); // Met à jour l'état d'authentification pour afficher les boutons "New Game" et "Continue"
+        setIsLoggedIn(true);
         alert('Registration successful!');
       } else {
         alert('Registration failed. Please try again.');
@@ -61,6 +63,11 @@ const Home = () => {
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    // Autres actions de déconnexion que vous pourriez avoir, comme vider les données utilisateur, etc.
   };
 
   const handleNewGame = () => {

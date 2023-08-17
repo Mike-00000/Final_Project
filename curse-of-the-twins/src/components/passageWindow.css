@@ -113,6 +113,15 @@
   color: white;
 }
 
+select {
+  width: 100%; /* ou une largeur fixe si vous préférez */
+  height: 40px;
+  overflow-y: auto;
+  padding: 5px 10px;
+  font-size: 16px; /* ajustez selon vos préférences */
+}
+
+
 /* .text-placeholder {
   font-size: 30px;
   line-height: 1.5;
