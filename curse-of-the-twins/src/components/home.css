@@ -2,7 +2,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
+    background-color: #000000;
     margin: 0;
     padding: 0;
   }
@@ -11,22 +11,63 @@ body {
     text-align: center;
     padding: 20px;
   }
-  
+
+  .forms-container {
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid red;
+    gap: 20px; /* Espacement entre les formulaires */
+  }
   /* .container {
-    max-width: 800px;
+    max-width: 1024px;
     margin: 0 auto;
+    background-image: url('../images/couverture.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   } */
   
+  .title {
+    text-align: center;
+}
+
   h1 {
-    color: #333;
+    color: #4757eb;
+  }
+
+  h1.title {
+    font-family: 'Alegreya', serif;
+    font-size: 40px;
+}
+
+  
+  .arabesque, .arabesque.mirror {
+    width: 150px;  /* À adapter en fonction de la taille désirée */
+    height: 40px; /* À adapter en fonction de la taille désirée */
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .arabesque.mirror {
+    transform: scaleX(-1); 
+}
+
+  .title-container {
+    display: flex;
+    align-items: center; /* Pour centrer verticalement */
+    justify-content: center;
   }
   
   form {
     margin: 20px 0;
+    flex: 1; /* Permet à chaque formulaire de prendre la même largeur */
   }
   
   label {
@@ -43,9 +84,46 @@ body {
     border-radius: 4px;
   }
   
-  button {
-    background-color: #3498db;
+  .buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Espace entre les boutons */
+}
+
+/* .button-box {
+  display: inline-block;  
+  padding: 5px 20px; 
+  background-color: #2b0986; 
+  background-image: linear-gradient(to right, #4757eb, rgb(189, 0, 0), #4757eb);
+
+  border-radius: 5px; 
+  margin: 0 5px 5px 5px ;        
+} */
+
+/* .button-box button {
+  background-color: #3498db;
+  background-image: linear-gradient(red, blue);
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0;          
+  cursor: pointer;
+  border-radius: 5px;
+} */
+
+
+
+
+  .buttton {
+    background-color: #4757eb;
+    background-image: linear-gradient(#4757eb, rgb(0, 0, 0), #4757eb);
     color: #fff;
+    margin: 0px 20px 20px 20px;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -53,7 +131,40 @@ body {
     transition: background-color 0.3s;
   }
   
-  button:hover {
-    background-color: #2980b9;
+  .buttton:hover {
+    background-color: #9b0909;
   }
-  
+
+  .not-authenticated {
+    /* background-image: url('../images/ville.jpg'); */
+    background-size: cover; /* l'image couvre entièrement l'élément */
+    background-position: center; /* l'image est centrée */
+    background-repeat: no-repeat; /* l'image ne se répète pas */
+    background-attachment: fixed; /* l'image ne défile pas avec le contenu */
+    height: 100vh;
+}
+
+/* Définir l'arrière-plan pour l'état authentifié */
+.authenticated {
+    /* background-image: url('../images/couverture.jpg'); */
+    background-size: 800px 800px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100vh;
+}
+
+
+.image-container {
+  display: flex; 
+  justify-content: center; 
+}
+
+.image-container img {
+  width: 40%; 
+  height: auto;
+}
+
+.mirror-image {
+  transform: scaleX(-1);
+}
