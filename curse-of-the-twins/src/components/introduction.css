@@ -36,12 +36,13 @@
 .text-container {
   flex: 1;
   height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.7);
-  border: 2px solid white;
+  /* border: 2px solid rgb(0, 0, 0); */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   font-family: 'Dancing Script', cursive;
 }
@@ -51,8 +52,8 @@
   background-size: cover;
   background-repeat: no-repeat;
   padding: 80px;
-  width: 60%;
-  height: 70%;
+  width: 80%;
+  height: 80%;
   /* font-family: 'Dancing Script', cursive; */
 }
 

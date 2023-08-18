@@ -33,7 +33,7 @@ const Home = () => {
       });
   
       if (response.status === 200) {
-        setIsLoggedIn(true);
+        setIsAuthenticated(true);
       } else {
         alert('Authentication failed. Please try again.');
       }
@@ -58,7 +58,7 @@ const Home = () => {
       });
   
       if (response.ok) {
-        setIsLoggedIn(true);
+        setIsAuthenticated(true);
         alert('Registration successful!');
       } else {
         alert('Registration failed. Please try again.');
@@ -69,7 +69,8 @@ const Home = () => {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    console.log("Logout function called");
+    setIsAuthenticated(false);
     // Autres actions de déconnexion que vous pourriez avoir, comme vider les données utilisateur, etc.
   };
 
@@ -98,21 +99,21 @@ const Home = () => {
               //   </label>
               //   <button type="submit">Login</button>
               // </form>
-//               <form onSubmit={handleRegister}>
-//                 <label>
-//                   Username:
-//                   <input type="text" value={registerUsername} onChange={(e) => setRegisterUsername(e.target.value)} />
-//                 </label>
-//                 <label>
-//                   Password:
-//                   <input type="password" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
-//                 </label>
-//                 <label>
-//                   Email:
-//                   <input type="text" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} />
-//                 </label>
-//                 <button type="submit">Register</button>
-//               </form>
+              // <form onSubmit={handleRegister}>
+              //   <label>
+              //     Username:
+              //     <input type="text" value={registerUsername} onChange={(e) => setRegisterUsername(e.target.value)} />
+              //   </label>
+              //   <label>
+              //     Password:
+              //     <input type="password" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
+              //   </label>
+              //   <label>
+              //     Email:
+              //     <input type="text" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} />
+              //   </label>
+              //   <button type="submit">Register</button>
+              // </form>
 //               <button onClick={handleNewGame}>New Game</button>
 //               <button onClick={() => setNewGame(false)}>Continue</button>
 //             </>
@@ -150,6 +151,9 @@ return (
                       <div className="button-box">
                           <button className='buttton' onClick={() => setNewGame(false)}>Continue</button>
                       </div>
+                      <div className="button-box">
+                          <button className='buttton' onClick={handleLogout}>Logout</button>
+                      </div>
                   </div>
 
                   <div className="image-container">
@@ -163,11 +167,31 @@ return (
           <>
               <div className="forms-container">
                   <form onSubmit={handleLogin}>
-                      /* ... Votre code existant pour le formulaire de connexion ... */
+                    <label>
+                      Username:
+                      <input type="text" value={loginUsername} onChange={(e) => setLoginUsername(e.target.value)} />
+                    </label>
+                    <label>
+                      Password:
+                      <input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
+                    </label>
+                    <button type="submit">Login</button>
                   </form>
                   <form onSubmit={handleRegister}>
-                      /* ... Votre code existant pour le formulaire d'inscription ... */
-                  </form>
+                <label>
+                  Username:
+                  <input type="text" value={registerUsername} onChange={(e) => setRegisterUsername(e.target.value)} />
+                </label>
+                <label>
+                  Password:
+                  <input type="password" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
+                </label>
+                <label>
+                  Email:
+                  <input type="text" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} />
+                </label>
+                <button type="submit">Register</button>
+              </form>
               </div>
           </>
       )}

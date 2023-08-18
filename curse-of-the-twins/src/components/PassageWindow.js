@@ -5,6 +5,7 @@ import illustration2 from "../images/girl-awaken.jpg";
 import illustration3 from "../images/forest.jpg";
 import illustration4 from "../images/girl-sees-boy.jpg";
 import illustration5 from "../images/tavern.jpg";
+import illustration6 from "../images/taverne2.jpg";
 // import { animateScroll as scroll } from 'react-scroll';
 
 // const illustrations = [illustration1, illustration2];
@@ -15,10 +16,11 @@ const illustrationsMap = {
   10: illustration3,
   12: illustration4,
   20: illustration5,
+  39: illustration6,
 };
 
 
-const ENDING_PASSAGE_IDS = [89, 112, 128, 146]; // Ajoutez tous les ID de passages de fin
+const ENDING_PASSAGE_IDS = [89, 112, 128, 147]; // Ajoutez tous les ID de passages de fin
 
 const formatTextWithLineBreaks = (text) => {
   let formattedText = text.replace(/<br>/g, "<br />");
@@ -36,7 +38,7 @@ const determineChoicesToFetch = (currentPassageId) => {
       return "5,6";
     case 35:
       return "7,8";
-    case 44:
+    case 43:
       return "9,10";
     case 66:
       return "11,12";
@@ -61,6 +63,8 @@ const PassageWindow = ({ passageId2 }) => {
 
   // const hashText = useRef(false)
   const [isAtEndOfPassages, setIsAtEndOfPassages] = useState(false);
+  const [isChapterEnd, setIsChapterEnd] = useState(false);
+
   useEffect(() => {
     console.log("isAtEndOfPassages:", isAtEndOfPassages);
     console.log("currentPassage ID:", currentPassage?.id);
@@ -133,17 +137,24 @@ useEffect(() => {
   }, []);
 
   const handleNext = () => {
+    if (ENDING_PASSAGE_IDS.includes(currentPassage?.id)) {
+      setIsChapterEnd(true);
+      setDisplayText("");
+      return;
+    }
+
     if (currentIndex === textPassages.length - 1) {
       setIsAtEndOfPassages(true);
       return;
     }
+
     setDisplayText("");
     // setIsTextComplete(true);
     // if(hashText.current) {
     //   // hashText.current = false
     //   // return
     // };
-    setIsTextComplete(false);
+    setIsTextComplete(true);
     if (currentIndex < textPassages.length - 1) {
       setCurrentIndex((prevIndex) => prevIndex + 1);
     } else {
@@ -163,6 +174,7 @@ useEffect(() => {
   useEffect(() => {
     if (isAtEndOfPassages) {
       const fetchChoices = async () => {
+        console.log("End of passage:", currentPassage?.id);
         const choiceIdsToFetch = determineChoicesToFetch(currentPassage?.id);
         if (choiceIdsToFetch) {
           try {
@@ -244,30 +256,34 @@ useEffect(() => {
         style={{ backgroundImage: `url(${currentIllustration})` }}
       ></div>
       <div className="text-container2">
-        <div className="parchment2 aaa2" id="parchment-id" ref={textRef}>
-          <p
-            className={`text2 ${
-              currentPassage?.passage_type === "thought" ? "italic-text" : ""
-            }`}
-            dangerouslySetInnerHTML={{ __html: displayText }}
-          ></p>
-          {isAtEndOfPassages &&
-          !ENDING_PASSAGE_IDS.includes(currentPassage?.id) ? (
-            <select value={choices[selectedChoiceIndex]?.choice_id}>
-              {choices.map((choice) => (
-                <option key={choice.choice_id} value={choice.choice_id}>
-                  {choice.choice_text}
-                </option>
-              ))}
-            </select>
-          ) : (
-            isTextComplete && (
-              <button onClick={handleNext} className="next-button2">
-                Next
-              </button>
-            )
-          )}
-        </div>
+      <div className="parchment2 aaa2" id="parchment-id" ref={textRef}>
+    {isChapterEnd ? (
+      <div className="chapter-end chapter-end-lower">End of the first chapter</div>
+    ) : (
+        <>
+            <p
+                className={`text2 ${
+                    currentPassage?.passage_type === "thought" ? "italic-text" : ""
+                }`}
+                dangerouslySetInnerHTML={{ __html: displayText }}
+            ></p>
+            {isAtEndOfPassages && !ENDING_PASSAGE_IDS.includes(currentPassage?.id) ? (
+                <select value={choices[selectedChoiceIndex]?.choice_id}>
+                    {choices.map((choice) => (
+                        <option key={choice.choice_id} value={choice.choice_id}>
+                            {choice.choice_text}
+                        </option>
+                    ))}
+                </select>
+            ) : isTextComplete ? (
+                <button onClick={handleNext} className="next-button2">
+                    Next
+                </button>
+            ) : null}
+        </>
+    )}
+</div>
+
       </div>
       <audio
         ref={audioRef}
@@ -276,7 +292,7 @@ useEffect(() => {
       />
     </div>
   );
-};
+          }      
 
 export default PassageWindow;
 
