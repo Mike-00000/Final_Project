@@ -3,6 +3,7 @@ import './home.css';
 import Introduction from './Introduction'; 
 import couverture from '../images/couverture.jpg';
 import arabesque from "../images/arabesque.png";
+import background from "../images/cabane.jpg";
 
 
 

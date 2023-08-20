@@ -44,7 +44,7 @@
   background-color: rgba(0, 0, 0, 0.7);
   /* border: 2px solid rgb(0, 0, 0); */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  font-family: 'Dancing Script', cursive;
+  /* font-family: 'Dancing Script', cursive; */
 }
 
 .parchment {
@@ -52,7 +52,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   padding: 80px;
-  width: 80%;
+  width: 60%;
   height: 80%;
   /* font-family: 'Dancing Script', cursive; */
 }
@@ -62,7 +62,7 @@
   line-height: 1.5;
   font-family: serif;
   color: #000000;
-  font-family: 'Dancing Script', cursive;
+  /* font-family: 'Dancing Script', cursive; */
 }
 
 .next-button {

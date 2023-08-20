@@ -6,6 +6,10 @@ import illustration3 from "../images/forest.jpg";
 import illustration4 from "../images/girl-sees-boy.jpg";
 import illustration5 from "../images/tavern.jpg";
 import illustration6 from "../images/taverne2.jpg";
+import illustration7 from "../images/village.jpg";
+import illustration8 from "../images/girltree.jpg";
+import illustration9 from "../images/girlatknees.jpg";
+
 // import { animateScroll as scroll } from 'react-scroll';
 
 // const illustrations = [illustration1, illustration2];
@@ -17,10 +21,26 @@ const illustrationsMap = {
   12: illustration4,
   20: illustration5,
   39: illustration6,
+  114: illustration7,
+  29: illustration3,
+  30: illustration8,
+  67: illustration3,
+  78: illustration9,
+  90: illustration3,
+  101: illustration9,
+};
+
+const musicMap = {
+  6: "/Secret of the Forest.mp3",
+  39: "You Can Hear The Cry Of The Planet.mp3",
+  23: "Mars Village - Moderate.mp3",
+  29: "Floating Museum (Darker Vision).mp3",
+  52: "Awakening.mp3",
+  114: "Floating Museum (Darker Vision).mp3",
 };
 
 
-const ENDING_PASSAGE_IDS = [89, 112, 128, 147]; // Ajoutez tous les ID de passages de fin
+const ENDING_PASSAGE_IDS = [89, 112, 128, 147]; 
 
 const formatTextWithLineBreaks = (text) => {
   let formattedText = text.replace(/<br>/g, "<br />");
@@ -43,7 +63,7 @@ const determineChoicesToFetch = (currentPassageId) => {
     case 66:
       return "11,12";
     default:
-      return ""; // retourne une chaîne vide par défaut ou une valeur appropriée
+      return "";
   }
 };
 
@@ -59,6 +79,8 @@ const PassageWindow = ({ passageId2 }) => {
   const textIndexRef = useRef(0); // Référence pour le textIndex
   const [isTextComplete, setIsTextComplete] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const currentMusic = musicMap[currentPassage?.id];
+
   const [currentIllustration, setCurrentIllustration] = useState(illustration1); // Image initiale par défaut.
 
   // const hashText = useRef(false)
@@ -154,7 +176,7 @@ useEffect(() => {
     //   // hashText.current = false
     //   // return
     // };
-    setIsTextComplete(true);
+    setIsTextComplete(false);
     if (currentIndex < textPassages.length - 1) {
       setCurrentIndex((prevIndex) => prevIndex + 1);
     } else {
@@ -285,11 +307,17 @@ useEffect(() => {
 </div>
 
       </div>
-      <audio
+      {/* <audio
         ref={audioRef}
         src="/Secret of the Forest.mp3"
         autoPlay={isMusicPlaying}
+      /> */}
+      <audio
+          ref={audioRef}
+          src={currentMusic}
+          autoPlay={isMusicPlaying}
       />
+
     </div>
   );
           }      
