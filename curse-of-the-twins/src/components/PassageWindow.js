@@ -176,7 +176,7 @@ useEffect(() => {
     //   // hashText.current = false
     //   // return
     // };
-    setIsTextComplete(false);
+    setIsTextComplete(true);
     if (currentIndex < textPassages.length - 1) {
       setCurrentIndex((prevIndex) => prevIndex + 1);
     } else {

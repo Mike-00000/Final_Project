@@ -29,7 +29,7 @@ const Introduction = (props) => {
   const [currentIllustration, setCurrentIllustration] = useState(illustrations[0]);
   const [introductionPassages, setIntroductionPassages] = useState([]);
   const [passageId, setPassageId] = useState(1);
-  const [showNextButton, setShowNextButton] = useState(false);
+  const [showNextButton, setShowNextButton] = useState(true);
 
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
   const { handleNextComponent, passageIdfordb } = useContext(AppContext);
