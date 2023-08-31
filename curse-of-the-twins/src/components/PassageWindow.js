@@ -18,29 +18,29 @@ const illustrationsMap = {
   6: illustration1,
   7: illustration2,
   10: illustration3,
-  12: illustration4,
-  20: illustration5,
-  39: illustration6,
-  114: illustration7,
-  29: illustration3,
-  30: illustration8,
-  67: illustration3,
-  78: illustration9,
-  90: illustration3,
-  101: illustration9,
+  15: illustration4,
+  23: illustration5,
+  41: illustration6,
+  145: illustration7,
+  31: illustration3,
+  32: illustration8,
+  71: illustration3,
+  92: illustration9,
+  108: illustration3,
+  129: illustration9,
 };
 
 const musicMap = {
   6: "/Secret of the Forest.mp3",
-  39: "You Can Hear The Cry Of The Planet.mp3",
-  23: "Mars Village - Moderate.mp3",
-  29: "Floating Museum (Darker Vision).mp3",
-  52: "Awakening.mp3",
-  114: "Floating Museum (Darker Vision).mp3",
+  41: "You Can Hear The Cry Of The Planet.mp3",
+  25: "Mars Village - Moderate.mp3",
+  31: "Floating Museum (Darker Vision).mp3",
+  55: "Awakening.mp3",
+  145: "Floating Museum (Darker Vision).mp3",
 };
 
 
-const ENDING_PASSAGE_IDS = [89, 112, 128, 147]; 
+const ENDING_PASSAGE_IDS = [107, 144, 165, 185]; 
 
 const formatTextWithLineBreaks = (text) => {
   let formattedText = text.replace(/<br>/g, "<br />");
@@ -50,17 +50,17 @@ const formatTextWithLineBreaks = (text) => {
 
 const determineChoicesToFetch = (currentPassageId) => {
   switch (currentPassageId) {
-    case 13:
+    case 16:
       return "1,2";
-    case 22:
+    case 24:
       return "3,4";
-    case 28:
+    case 30:
       return "5,6";
-    case 35:
+    case 37:
       return "7,8";
-    case 43:
+    case 47:
       return "9,10";
-    case 66:
+    case 70:
       return "11,12";
     default:
       return "";
@@ -146,7 +146,7 @@ useEffect(() => {
         const allData = await response.json();
         // console.log(allData)
         const filteredData = allData.filter(
-          (passage) => passage.id >= 6 && passage.id <= 13
+          (passage) => passage.id >= 6 && passage.id <= 16
         );
         // console.log(filteredData);
         filteredData.sort((a, b) => a.id - b.id);
@@ -307,11 +307,6 @@ useEffect(() => {
 </div>
 
       </div>
-      {/* <audio
-        ref={audioRef}
-        src="/Secret of the Forest.mp3"
-        autoPlay={isMusicPlaying}
-      /> */}
       <audio
           ref={audioRef}
           src={currentMusic}

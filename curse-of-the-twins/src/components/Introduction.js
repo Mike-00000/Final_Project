@@ -34,7 +34,7 @@ const Introduction = (props) => {
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
   const { handleNextComponent, passageIdfordb } = useContext(AppContext);
   const formatTextWithLineBreaks = (text) => {
-    const formattedText = text.replace(/<br>/g, '<br />');
+    const formattedText = text.replace(/<br>/g, '<br/>');
     return formattedText;
   };
 
@@ -45,10 +45,13 @@ const Introduction = (props) => {
       try {
         const response = await fetch(`http://localhost:3000/passages/${passageIdfordb}`);
         const data = await response.json();
+        console.log("testttttt", data);
 
         if (Array.isArray(data)) {
           setIntroductionPassages(data);
         }
+        console.log("testttttt2", setIntroductionPassages);
+
       } catch (error) {
         console.error('Error fetching introduction passages:', error);
       }
@@ -59,6 +62,7 @@ const Introduction = (props) => {
 
   useEffect(() => {
     const passageText = introductionPassages?.find((passage) => passage.id === passageId)?.passage_text || '';
+    console.log("testttttt3", passageText);
 
     const intervalId = setInterval(() => {
       const charactersPerFrame = charactersPerFrameArray.find((value, index) => index === passageId - 1) || 100;
@@ -68,15 +72,16 @@ const Introduction = (props) => {
       } else {
         clearInterval(intervalId);
         if (currentIllustration !== illustrations[illustrations.length - 1]) {
+          const DELAY_BEFORE_NEXT_PASSAGE = 6700;
           setTimeout(() => {
             const currentIllustrationIndex = illustrations.indexOf(currentIllustration);
             setCurrentIllustration(illustrations[currentIllustrationIndex + 1]);
             setCurrentIndex(0);
             setDisplayText('');
             setPassageId((prevPassageId) => prevPassageId + 1);
-          }, 6700);
+          }, DELAY_BEFORE_NEXT_PASSAGE);
         } else {
-          setShowNextButton(true); // Afficher le bouton "Next" après la fin de l'introduction
+          setShowNextButton(true); 
         }
       }
     }, 75);
