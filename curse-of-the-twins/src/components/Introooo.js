@@ -45,15 +45,15 @@ const Introduction = (props) => {
       try {
         const response = await fetch(`http://localhost:3000/passages/${passageIdfordb}`);
         const data = await response.json();
-        // console.log("testttttt", data);
+        console.log("testttttt", data);
 
         if (Array.isArray(data)) {
           setIntroductionPassages(data);
         }
-        // console.log("testttttt2", setIntroductionPassages);
+        console.log("testttttt2", setIntroductionPassages);
 
       } catch (error) {
-        // console.error('Error fetching introduction passages:', error);
+        console.error('Error fetching introduction passages:', error);
       }
     };
 
@@ -62,7 +62,7 @@ const Introduction = (props) => {
 
   useEffect(() => {
     const passageText = introductionPassages?.find((passage) => passage.id === passageId)?.passage_text || '';
-    // console.log("testttttt3", passageText);
+    console.log("testttttt3", passageText);
 
     const intervalId = setInterval(() => {
       const charactersPerFrame = charactersPerFrameArray.find((value, index) => index === passageId - 1) || 100;
@@ -73,25 +73,13 @@ const Introduction = (props) => {
         clearInterval(intervalId);
         if (currentIllustration !== illustrations[illustrations.length - 1]) {
           const DELAY_BEFORE_NEXT_PASSAGE = 6700;
-          console.log(passageId);
-          if (passageId ==1) {
-            setTimeout(() => {
-              const currentIllustrationIndex = illustrations.indexOf(currentIllustration);
-              setCurrentIllustration(illustrations[currentIllustrationIndex + 1]);
-              setCurrentIndex(0);
-              setDisplayText('');
-              setPassageId((prevPassageId) => prevPassageId + 1);
-            }, 43000);
-          } else {
-            setTimeout(() => {
-              const currentIllustrationIndex = illustrations.indexOf(currentIllustration);
-              setCurrentIllustration(illustrations[currentIllustrationIndex + 1]);
-              setCurrentIndex(0);
-              setDisplayText('');
-              setPassageId((prevPassageId) => prevPassageId + 1);
-            }, DELAY_BEFORE_NEXT_PASSAGE);
-          };
-          
+          setTimeout(() => {
+            const currentIllustrationIndex = illustrations.indexOf(currentIllustration);
+            setCurrentIllustration(illustrations[currentIllustrationIndex + 1]);
+            setCurrentIndex(0);
+            setDisplayText('');
+            setPassageId((prevPassageId) => prevPassageId + 1);
+          }, DELAY_BEFORE_NEXT_PASSAGE);
         } else {
           setShowNextButton(true); 
         }
@@ -114,7 +102,7 @@ const Introduction = (props) => {
         {showNextButton && <button onClick= {handleNextComponent} className="next-button">Next</button>}
         </div>
       </div>
-      <audio src="/RPG intro 100 BPM2.wav" autoPlay={isMusicPlaying} />
+      {/* <audio src="/RPG intro 100 BPM2.wav" autoPlay={isMusicPlaying} /> */}
     </div>
   );
 };
