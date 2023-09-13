@@ -81,7 +81,7 @@ const Introduction = (props) => {
               setCurrentIndex(0);
               setDisplayText('');
               setPassageId((prevPassageId) => prevPassageId + 1);
-            }, 43000);
+            }, 43100);
           } else {
             setTimeout(() => {
               const currentIllustrationIndex = illustrations.indexOf(currentIllustration);
