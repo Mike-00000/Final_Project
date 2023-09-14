@@ -45,13 +45,16 @@ const Introduction = (props) => {
   useEffect(() => {
     const fetchIntroductionPassages = async () => {
       try {
+        console.log("== fetchIntro ");
         const response = await fetch(
           `http://localhost:3000/passages/${passageIdfordb}`
         );
         const data = await response.json();
         // console.log("testttttt", data);
 
+        console.log("=== before set passages")
         if (Array.isArray(data)) {
+          console.log("=== set passages")
           setIntroductionPassages(data);
         }
         // console.log("testttttt2", setIntroductionPassages);
@@ -64,6 +67,7 @@ const Introduction = (props) => {
   }, [passageId]);
 
   useEffect(() => {
+    console.log("== passages ");
     const passageText =
       introductionPassages?.find((passage) => passage.id === passageId)
         ?.passage_text || "";
@@ -105,7 +109,7 @@ const Introduction = (props) => {
 
                 return prevPassageId + 1;
               });
-            }, 46400);
+            }, 44300);
           } else {
             console.log("-- inside else");
             setTimeout(() => {
