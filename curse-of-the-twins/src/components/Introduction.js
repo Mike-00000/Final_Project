@@ -211,43 +211,47 @@ const Introduction = (props) => {
 
     fetchIntroductionPassages();
   }, [passageId]);
+
   useEffect(() => {
-    if (passageId < introductionPassages.length) {
-      const passageText = introductionPassages[passageId].passage_text;
-      const charactersPerFrame = charactersPerFrameArray[passageId] || 100;
+  if (passageId < introductionPassages.length) {
+    const passageText = introductionPassages[passageId].passage_text;
+    const charactersPerFrame = charactersPerFrameArray[passageId] || 100;
 
-      const intervalId = setInterval(() => {
-        if (currentIndex < passageText.length) {
-          setDisplayText((prevText) => prevText + passageText[currentIndex]);
-          setCurrentIndex((prevIndex) => prevIndex + 1);
+    const intervalId = setInterval(() => {
+      if (currentIndex < passageText.length) {
+        setDisplayText((prevText) => prevText + passageText[currentIndex]);
+        setCurrentIndex((prevIndex) => prevIndex + 1);
+      } else {
+        clearInterval(intervalId);
+
+        // Move to the next passage after 6 seconds, unless it's the last passage
+        if (passageId < introductionPassages.length - 1) {
+          setTimeout(() => {
+            setShowNextButton(false);
+            setCurrentIndex(0);
+            setDisplayText("");
+            // Update the illustration
+            if (passageId + 1 < illustrations.length) {
+              setCurrentIllustration(illustrations[passageId + 1]);
+            }
+            setPassageId((prevPassageId) => prevPassageId + 1);
+          }, 3500);
         } else {
-          clearInterval(intervalId);
+          // It's the last passage of the introduction, show the "Next" button
           setShowNextButton(true);
-
-          // Move to the next passage after 6 seconds, unless it's the last passage
-          if (passageId < introductionPassages.length - 1) {
-            setTimeout(() => {
-              setShowNextButton(false);
-              setCurrentIndex(0);
-              setDisplayText("");
-              // Update the illustration
-              if (passageId + 1 < illustrations.length) {
-                setCurrentIllustration(illustrations[passageId + 1]);
-              }
-              setPassageId((prevPassageId) => prevPassageId + 1);
-            }, 3500);
-          }
         }
-      }, 75);
+      }
+    }, 75);
 
-      return () => clearInterval(intervalId);
-    }
-  }, [currentIndex, passageId, introductionPassages]);
+    return () => clearInterval(intervalId);
+  }
+}, [currentIndex, passageId, introductionPassages]);
+
 
   useEffect(() => {
     textRef.current.scrollTop = textRef.current.scrollHeight;
   }, [displayText]);
-
+  
   return (
     <div className="container">
       <div className="illustration-container" style={{ backgroundImage: `url(${currentIllustration})` }} />
@@ -259,7 +263,7 @@ const Introduction = (props) => {
               __html: formatTextWithLineBreaks(displayText),
             }}
           />
-          {showNextButton && (
+          {showNextButton && passageId === introductionPassages.length - 1 && (
             <button onClick={handleNextComponent} className="next-button">
               Next
             </button>
@@ -276,7 +280,7 @@ export default Introduction;
 
 
 
-
+// Après ça, on pourra passer au déploiement (il me semble que tu m'avais proposé l'autre fois au tel de m'aider à le faire, si je me souviens bien).
 
 
 // ____________________________________________________________________________________
