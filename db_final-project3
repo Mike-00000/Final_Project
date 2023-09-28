@@ -1,0 +1,414 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.3
+-- Dumped by pg_dump version 15.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: choices_table; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.choices_table (
+    passage_id integer,
+    choice_id integer NOT NULL,
+    choice_text text NOT NULL,
+    passage_id_next integer
+);
+
+
+ALTER TABLE public.choices_table OWNER TO postgres;
+
+--
+-- Name: choices_table_choice_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.choices_table_choice_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.choices_table_choice_id_seq OWNER TO postgres;
+
+--
+-- Name: choices_table_choice_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.choices_table_choice_id_seq OWNED BY public.choices_table.choice_id;
+
+
+--
+-- Name: passages_table; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.passages_table (
+    id integer NOT NULL,
+    passage_id integer NOT NULL,
+    order_number integer NOT NULL,
+    passage_text text NOT NULL,
+    passage_type character varying(20) NOT NULL
+);
+
+
+ALTER TABLE public.passages_table OWNER TO postgres;
+
+--
+-- Name: passages_table_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.passages_table_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.passages_table_id_seq OWNER TO postgres;
+
+--
+-- Name: passages_table_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.passages_table_id_seq OWNED BY public.passages_table.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    user_id integer NOT NULL,
+    username character varying(255) NOT NULL,
+    password character varying(255) NOT NULL,
+    email character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    last_loggedin timestamp without time zone
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_user_id_seq OWNER TO postgres;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+
+
+--
+-- Name: choices_table choice_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.choices_table ALTER COLUMN choice_id SET DEFAULT nextval('public.choices_table_choice_id_seq'::regclass);
+
+
+--
+-- Name: passages_table id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.passages_table ALTER COLUMN id SET DEFAULT nextval('public.passages_table_id_seq'::regclass);
+
+
+--
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
+
+--
+-- Data for Name: choices_table; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.choices_table (passage_id, choice_id, choice_text, passage_id_next) FROM stdin;
+1	1	Choice 1: Follow the young man	2
+1	2	Choice 2: Continue my walk	3
+2	3	Option 1: Enter the tavern	5
+2	4	Option 2: Go home	4
+3	5	Option 1: Go to Kate	6
+3	6	Option 2: Go to the tavern	5
+4	7	Option 1: Stand still and watch him	7
+4	8	Option 2: Walk away discreetly to warn Sergeant Georges	8
+5	9	Option 1: Talk to Sergeant Georges	9
+5	10	Option 2: Follow the young man and talk to him	10
+6	11	Option 1: Go to the tavern	5
+6	12	Option 2: Go home	4
+\.
+
+
+--
+-- Data for Name: passages_table; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.passages_table (id, passage_id, order_number, passage_text, passage_type) FROM stdin;
+8	1	3	Emma gets up and dresses in simple clothes. She goes down to the kitchen and drinks a glass of water.	narration
+11	1	6	Who does he remind me of?	thought
+12	1	7	She stops and turns to watch him walk away. She is increasingly troubled. Then her eyes widen in surprise.	narration
+15	2	2	Where could he be going? And above all, if he is indeed my brother, what is he doing here and where was he before?	thought
+16	2	3	The young man joins another man in his thirties, near the weaver's shop. They exchange a few words.	narration
+18	2	5	The two men start walking again, away from the shop.	narration
+19	2	6	Who is this second person and where are they going?	thought
+20	2	7	She follows them discreetly, past a few village establishments, then sees them enter the large tavern.	narration
+21	2	8	The tavern... This is getting complicated...	thought
+22	2	9	What should I do	thought
+24	3	2	"Emma!"	dialogue
+27	3	5	Emma thinks of the boy from earlier, still confused. \nShe finds it hard to get him out of her mind.	narration
+28	3	6	Why can't I just move on and forget him? \nWhat should I do?	thought
+31	4	3	She feels instantly soothed.	narration
+32	4	4	A slightly different sound startles her and she opens her eyes again.	narration
+2	0	2	But one day, as money worries mounted and he feared he would struggle to feed his family, he reluctantly decided to borrow money from a trader. <br> Unfortunately, as time went on, he was not able to repay his loan. <br> After several threats due to lack of payment, the trader decided to make an example out of them.	narration
+4	0	4	Little Emma managed to hide. <br> Finally, the trader and his men set fire to the hut and left, taking Erik with them.....	narration
+5	0	5	Although traumatized, Emma managed to climb out a window on the opposite side of the hut, and hid in the woods, crying silently...	narration
+7	1	2	Always the same nightmare... <br> Always those men breaking into the house, killing my parents, then taking my brother... <br> It's been almost ten years now. <br> I'm 19, I'm a woman now. I've learned to live with this tragedy... <br> ...But despite everything, these nightmares keep haunting me in a recurring way.	thought
+3	0	3	One night, he and his men suddenly and loudly broke into the small family's hut and immediately killed the father. <br> They beat the mother and killed her as well. <br> Erik tried to escape, but he was not fast enough. He was caught...	narration
+14	2	1	Emma let the young man walk a little, then begin to follow him discreetly. \n<br> She skirts the various buildings she passes, keeping her distance. <br> She's extremely intrigued and her heart is racing\npanting.\n	narration
+17	2	4	Too bad! I can't hear them from this distance.\n	thought
+6	1	1	Today. <br> The rays of the morning sun enter through the bedroom window despite the drawn curtains. <br> This sun and the chirping birds do not wake Emma, who sleeps deeply. <br> But suddenly, she wakes up with a start, panting.	narration
+13	1	8	The only person who looks like him, at least in my memory, is my brother. But that's impossible. He disappeared 10 years ago, kidnapped by those bandits... <br> I don't even know if he's alive... <br> What would he be doing here? <br> No, it's surely a coincidence... I think... <br> What should I do?	thought
+9	1	4	I'll go for a walk. I'm sure the sun, despite the chill of the morning, will do me good. It will take my mind off those nagging nightmares.	thought
+23	3	1	Emma turns around and continues on her way. She prefers to prolong this pleasant walk. \n<br> But she can't help feeling troubled. <br> She thought she'd pay a visit to her childhood friend, Kate. <br> They haven't seen each other for a few days. Emma's new job as a tailor's assistant is taking up a lot of her time.\n	narration
+25	3	3	The young woman turns in the direction of the voice. \n<br> It's Mrs. Wilkinson, the tavernkeeper's wife. \n<br> She approaches her.	narration
+26	3	4	"How are you, Emma? I haven't seen you in a while." \n<br> "I'm well, thank you. At the moment, I'm quite busy. But how are you and your husband?" \n<br> "Joe and I are fine, thank you. Business has been pretty brisk lately." \n<br> "I'm glad to hear that." \n<br> "By the way, there have been some new faces in the tavern the last 2 days." \n<br> "New faces..." Emma repeats, thinking of the young man. \n<br> "Good for us, they are additional customers!" \n<br> "Yes, yes, of course..." \n<br> "Well, I'll leave you alone, or Joe will have a fit. Good day." \n<br> "Good day, Mrs. Wilkinson."	dialogue
+29	4	1	Emma decides to go home. \nShe prefers to stay close to nature, which is much more pleasant for her. \n<br> She decides to take a detour along the stream. It's so pretty to look at, with its flowers, bushes and trees. \n<br> What's more, as the temperature rises with spring, it becomes more and more pleasant. \nIf it's not too cold, she might even get her feet wet\n	narration
+30	4	2	When she reaches the stream, she sits down and leans against a tree. \n<br> She closes her eyes and takes her time to enjoy the moment. She inhales the characteristic scent of nature, woody and moist. She listens to the rustling of the leaves and the murmur of the stream.	narration
+35	4	7	What should I do?	thought
+38	5	3	What will people say if they see me here?	thought
+41	5	6	The hooded man leans his head back to finish his glass of whisky, revealing part of his face to Emma's wide-eyed astonishment	narration
+43	5	8	Just as she's about to leave, the young man gets up as their eyes meet again. He goes to the bathroom	narration
+44	5	8	What should I do?	thought
+46	6	2	Stranger and stranger...	thought
+47	6	3	She makes her way to the west side of the village, passing a few other villagers	narration
+48	6	4	I missed Kate, I should have gone to her first. It'll do us good to talk a little. \nShe's probably at home at this hour, taking care of the children of the widows who have to work to support themselves.	thought
+50	6	6	How nice it is to hear life through children and their innocence. I sometimes think that life would be easier if we could just concentrate on the present moment like they do	thought
+55	6	11	Emma goes to the kitchen to look for ingredients	narration
+57	6	13	Emma prepares the pancake batter with these ingredients	narration
+59	6	15	She returns to the living room and hears the baby crying.	narration
+61	6	17	Kate looks worried	narration
+63	6	19	Emma steps out of Kate's house onto the grass in the garden, pensive	narration
+64	6	20	If I'm honest with myself, I have to admit that the young man who looks like my brother intrigues me, and I have a good mind to go to the tavern and see if he's still there...	thought
+65	6	21	At the same time, maybe I'm just fooling myself and should go home and think about something else...	thought
+66	6	22	What should I do?	thought
+34	4	6	There's something about him that scares me. \n<br> What is he after? \n<br> He really looks suspicious! \n<br> Maybe I should warn Sergeant Georges. With his militia, he could get to the bottom of this. \n<br> But at the same time, if I move, the bandit might see me...	thought
+36	5	1	I decide to follow him. I can't miss this chance. \nWhat if he really is my brother? \n<br> Actually, I only half believe it, but I've got to check it out and be sure!	thought
+37	5	2	Emma approaches the tavern, a little shaken by all this. \n<br> She hesitates at the wooden door; it's not often that a woman enters a place like this. \nIt happens, but it's quite rare.	narration
+40	5	5	When I look back at him, I see that he's at the table with the man who joined him outside, as well as another, more mysterious man wearing a hoodie. I can't see much of his face, but I can make out a short beard. \n<br> Who could they be... \n<br> I find them suspicious...	thought
+42	5	7	It can't be! It can't be him, I must be mistaken... \n<br> He looks like the trader who killed my parents... \n<br> But then, it all makes sense. It can't be a coincidence that the one who looks like my brother and the one who looks like the murderer who kidnapped him are sitting at the same table. \nIt would be highly unlikely. \n<br> I must warn Sergeant Georges!	thought
+45	6	1	Emma decides to continue on her way to meet her friend but keeps looking back to see the young man. \nShe sees him stop, then wait for another man to join him. <br> Finally, they enter the tavern.	narration
+49	6	5	Emma walked past the big house of the mayor. <br> Finally, after five minutes, she reaches her destination. \nFrom outside, she hears the excitement of children playing together. \n<br> The young woman smiles.	narration
+51	6	7	Emma knocks on the door.\n<br> After a few moments, the door opens to reveal Kate with a baby in her arms, followed by 4 children ranging in age from 3 to 6.	narration
+52	6	8	"Hello, Kate. I hope I'm not interrupting anything." \n<br> "No, no, don't worry. I'm used to it. Come on in, it'll cool my head to talk to an adult!"	dialogue
+53	6	9	Emma enters and sits down on a worn sofa. \n<br> Her friend, surrounded by children talking about games, sits down not far from her after bringing her a glass of water.	narration
+54	6	10	"It's been a long time since I've seen you, Emma. I've missed you." \n<br> "I've missed you too. I've been working a lot at the tailor shop and sometimes I don't have enough time." \n<br> "I can imagine. Same here, as you can see. By the way, if you have a moment, would you help me, please?" \n<br> "Yes, of course." \n<br> "Usually at this time the youngest is asleep, which gives me more time. But now she cries as soon as I put her down. Can you make me some pancake batter?" \n<br> "Yes, all right. I'll do it right away." \n<br> "Thank you. I'll let you see what's in the kitchen. I don't have much left; I have to go shopping."	dialogue
+56	6	12	Well, me and the kitchen, that's two... What do I need? \n<br> I go through what's in the kitchen, on the shelves, in the cupboards and in the cold room. \n<br> Which ingredients should I choose?	thought
+58	6	14	Good. I hope she will like it. \n<br> I cover it to let the batter rest and put the bowl in the cold room.	thought
+60	6	16	"There, it's done." \n<br> "Ah, great! Thank you so much."	dialogue
+62	6	18	"I think she's teething. I'm sorry, I can't stay with you, I have to take care of her." \n<br> "I understand, don't worry. I'll come back another day and you can tell me if my pancake batter is any good."\n<br> "Yes, I'll tell you. And if the kids like it, I'll make you a little present." \n<br> "Interesting..."	dialogue
+89	7	23	My head is spinning... \n<br> I feel my mind in turmoil...\n<br> My vision narrows and I begin to see blurry...\n<br> I feel my last strength ebbing away...\n<br> I think... I... <br> I..."	dialogue
+112	8	23	My head is spinning... \n<br> I feel my mind in turmoil...\n<br> My vision narrows and I begin to see blurry...\n<br> I feel my last strength ebbing away...\n<br> I think... I... <br> I...	thought
+147	10	19	My brother gives me one last dirty look, then throws me to the ground.\n<br> On my knees, I gasp for breath, tears in my eyes, but my vision is blurred... <br> My head is spinning... <br> Everything is spinning... <br> Everything is...	thought
+69	7	3	Damn, what am I going to do, this is terrible...	thought
+70	7	4	"I can't risk it, I'll kill you.	dialogue
+71	7	5	Emma hiccupped in astonishment	narration
+72	7	6	"But before that..." the bandit said with a smile, "I think we should have some fun first..."	dialogue
+75	7	9	Suddenly, she starts screaming.  She screams at the top of her lungs for a time she can't measure.\nShe feels the chaos in her head.	narration
+78	7	12	"We must get her to the doctor immediately," says the man who taught the young woman how to use a dagger.	dialogue
+79	7	13	He takes Emma's arm while she is still kneeling	narration
+80	7	14	"Would you be able to get up if I helped you?"	dialogue
+82	7	16	"That blood doesn't belong to you, does it?"	dialogue
+84	7	18	"Are you all right, miss? What happened to you?"	dialogue
+85	7	19	I don't know what voice my brother would have had as an adult, but if I had to imagine one, it would have been this one...	thought
+88	7	22	"This is..."\n"I..."	dialogue
+117	9	4	"An emergency, I must see the Sergeant!"	thought
+68	7	2	"What were you doing there?"\n<br> "No-nothing... Nothing at all, I was just resting."\n<br> "What did you see?"\n<br> "Nothing, I was just resting."\n<br> "Stop lying, bitch. You had your eyes open and were looking at me when I saw you."\n<br> "I-I just opened them. I swear."	dialogue
+73	7	7	My eyes widen when I realize what he wants to do to me. <br> I resist with all my strength. But suddenly he gives me a powerful second slap that stuns me.\n<br> He starts to pull up my dress, but I can't stop him... <br> Then suddenly, without realizing it, without thinking, I draw my dagger and plunge it into his neck. \n<br> Blood spurts from the wound and spills onto me as he emits borborygms. I watch him agonize for a few seconds, then he collapses beside me. <br>I can't stop shaking. I can't control the shaking. I don't understand what's happening to me or what I'm feeling.	thought
+74	7	8	Emma, shocked, lies still on the floor. Her traumatized mind is as if disconnected from its conscious part, allowing her not to become fully aware of what has just happened.\n<br> But after a few minutes, disconnected, watching the branches swaying in the wind, she more or less comes to and stands up.\n<br> She looks at the scene. She touches her face and sees her finger full of blood. She looks at the dead man lying in a huge red puddle and sees her dagger in the bandit's throat. She looks at this huge bloodstain staining the grass and at the blood on her own dress.	narration
+76	7	10	Oh my God. What have I done?\n<br> All...All that blood... \n<br> I... I killed a man\n<br> I... I have to tell the sergeant.	thought
+77	7	11	The young woman staggers along, completely dazed.\nBut after the first few minutes, her steps become firmer and her gait more determined. \n<br> She crossed the part of the forest that separated her from the village.\n<br> When she sees the first villagers, she slows down, while some start to scream at the sight of her.\n<br> They run to Emma as she feels her strength ebbing away. She falls to her knees and begins to cry.\n<br> The villagers run to her. As the crowd grows, people come from farther and farther away to see what's going on. When they catch a glimpse of Emma, everyone's eyes widen at the bloody horror. \n<br> Arthur the blacksmith and Sergeant Georges arrive soon after.	narration
+81	7	15	I slowly look up at him and answer with a small nod as my tears dry.\n<br> He helps me to sit up.\n<br> I appreciate being physically supported. However, I find it hard to express myself. It's as if the effort required to do so is titanic.\n<br> Slowly, clinging to Arthur's arm, I move forward.\n<br> In a soft voice, he says, "Would you have the strength to tell me what happened?"\n<br> The sergeant moves closer so as not to miss any information I might give.\n<br> Thinking back to the horrible scene, I begin to cry again.\n<br> The blacksmith doesn't insist. \n<br> He looks at me and inspects me from top to bottom.\n<br> After a while, he says to me quietly, "Your dress doesn't look torn anywhere. Except for the blood that stains it, it seems untouched..."\n<br> He scratches his head.	thought
+83	7	17	With a slow shake of my head, I answer in the negative.\n<br> Then, with an effort that seems considerable, I murmur, "On the way home, a bandit in the forest, near the stream..."\n<br> Arthur frowns. The sergeant, who was close enough to hear, immediately sets off in the direction of the stream.\n<br> Leaning close to my ear, Arthur says, "I'd rather you hadn't experienced this horror, but I'm glad I taught you how to use a dagger..."\n<br> Then a group of three men approach. But strangely, I don't recognize them. They're not from here.\n<br> Suddenly, I recognize one of them, the young man from earlier. He looks at me, intrigued, while I look back.\n<br> Then, looking more closely at the others, I recognize the second man, the one who had joined him before they entered the tavern together. The last man is wearing a cloak and a hood. His face is barely visible, except for a short beard.\n<br> The blacksmith looks at them suspiciously.\n<br> The one who looks like my brother looks briefly at the man in the hood, just long enough for him to nod slightly. As if he were the chef.\n<br> So the boy takes a step forward.	thought
+86	7	20	"She was attacked by a bandit," says Arthur.\n<br> "I see. Looks like she's in pretty bad shape!"\n<br> "Oh," continues Arthur with a grin, "she's in much better shape than he is. That's the bandit's blood on her clothes."	dialogue
+87	7	21	"I can see the young man’s eyes widen.\n<br> Then he turns to his boss. He approaches him and whispers a few words in his ear.\n<br> A gust of wind partially removes his hood. He quickly puts it back on. \n<br> I hiccupped in astonishment as I recognized him...\n<br> The trader who murdered my parents ten years ago..."	thought
+92	8	3	Damn, what am I going to do, this is terrible...	thought
+93	8	4	"I can't risk it, I'll kill you.	dialogue
+94	8	5	Emma hiccupped in astonishment	narration
+95	8	6	"But before that..." the bandit said with a smile, "I think we should have some fun first..."	dialogue
+98	8	9	Suddenly, she starts screaming.  She screams at the top of her lungs for a time she can't measure.\nShe feels the chaos in her head.	narration
+101	8	12	"We must get her to the doctor immediately," says the man who taught the young woman how to use a dagger.	dialogue
+102	8	13	He takes Emma's arm while she is still kneeling	narration
+103	8	14	"Would you be able to get up if I helped you?"	dialogue
+105	8	16	"That blood doesn't belong to you, does it?"	dialogue
+107	8	18	"Are you all right, miss? What happened to you?"	dialogue
+108	8	19	I don't know what voice my brother would have had as an adult, but if I had to imagine one, it would have been this one...	thought
+111	8	22	"This is..."\n"I..."	dialogue
+91	8	2	"What were you doing there?"\n<br> "No-nothing... Nothing at all, I was just resting."\n<br> "What did you see?"\n<br> "Nothing, I was just resting."\n<br> "Stop lying, bitch. You had your eyes open and were looking at me when I saw you."\n<br> "I-I just opened them. I swear."	dialogue
+96	8	7	My eyes widen when I realize what he wants to do to me. <br> I resist with all my strength. But suddenly he gives me a powerful second slap that stuns me.\n<br> He starts to pull up my dress, but I can't stop him... <br> Then suddenly, without realizing it, without thinking, I draw my dagger and plunge it into his neck. \n<br> Blood spurts from the wound and spills onto me as he emits borborygms. I watch him agonize for a few seconds, then he collapses beside me. <br>I can't stop shaking. I can't control the shaking. I don't understand what's happening to me or what I'm feeling.	thought
+97	8	8	Emma, shocked, lies still on the floor. Her traumatized mind is as if disconnected from its conscious part, allowing her not to become fully aware of what has just happened.\n<br> But after a few minutes, disconnected, watching the branches swaying in the wind, she more or less comes to and stands up.\n<br> She looks at the scene. She touches her face and sees her finger full of blood. She looks at the dead man lying in a huge red puddle and sees her dagger in the bandit's throat. She looks at this huge bloodstain staining the grass and at the blood on her own dress.	narration
+99	8	10	Oh my God. What have I done?\n<br> All...All that blood... \n<br> I... I killed a man.\n<br> I... I have to tell the sergeant.	thought
+100	8	11	The young woman staggers along, completely dazed.\nBut after the first few minutes, her steps become firmer and her gait more determined. \n<br> She crossed the part of the forest that separated her from the village.\n<br> When she sees the first villagers, she slows down, while some start to scream at the sight of her.\n<br> They run to Emma as she feels her strength ebbing away. She falls to her knees and begins to cry.\n<br> The villagers run to her. As the crowd grows, people come from farther and farther away to see what's going on. When they catch a glimpse of Emma, everyone's eyes widen at the bloody horror. \n<br> Arthur the blacksmith and Sergeant Georges arrive soon after.	narration
+104	8	15	I slowly look up at him and answer with a small nod as my tears dry.\n<br> He helps me to sit up.\n<br> I appreciate being physically supported. However, I find it hard to express myself. It's as if the effort required to do so is titanic.\n<br> Slowly, clinging to Arthur's arm, I move forward.\n<br> In a soft voice, he says, "Would you have the strength to tell me what happened?"\n<br> The sergeant moves closer so as not to miss any information I might give.\n<br> Thinking back to the horrible scene, I begin to cry again.\n<br> The blacksmith doesn't insist. \n<br> He looks at me and inspects me from top to bottom.\n<br> After a while, he says to me quietly, "Your dress doesn't look torn anywhere. Except for the blood that stains it, it seems untouched..."\n<br> He scratches his head.	thought
+109	8	20	"She was attacked by a bandit," says Arthur.\n<br> "I see. Looks like she's in pretty bad shape!"\n<br> "Oh," continues Arthur with a grin, "she's in much better shape than he is. That's the bandit's blood on her clothes."	dialogue
+110	8	21	"I can see the young man’s eyes widen.\n<br> Then he turns to his boss. He approaches him and whispers a few words in his ear.\n<br> A gust of wind partially removes his hood. He quickly puts it back on. \n<br> I hiccupped in astonishment as I recognized him...\n<br> The trader who murdered my parents ten years ago..."	thought
+118	9	5	He drops his things and starts running towards me	narration
+120	9	7	He turns his head to me, completely taken aback	thought
+124	9	11	The sergeant's eyes widen	narration
+131	10	3	Oh my God! Receiving a sexual proposition from my own brother... What a horror... It makes me nauseous...	thought
+133	10	5	He lost his smile	narration
+135	10	7	He frowns	thought
+136	10	8	"Why are you asking me this question when you told me you didn't come here to have fun with me?"\n	dialogue
+138	10	10	"Who's that man over there, the one with the hood?"\n	dialogue
+139	10	11	This time he looks at me almost maliciously	narration
+142	10	14	"Who are you to tell such lies?"\n	dialogue
+143	10	15	I can't answer, his grip is so strong. He looks at me hatefully	thought
+144	10	16	"My sister died a long time ago!"\n	dialogue
+146	10	18	"What the hell are you doing? You're going to get us in trouble! We're leaving right now!"\n	dialogue
+137	10	9	I'm doing it wrong... How can I do it?\n.	thought
+115	9	2	"Hello, Emma! What can I do for you?"\n<br> "I need to see the sergeant right away!"\n<br> "Sorry, he's out on patrol with one of his men."\n<br> "Damn... I need to talk to him right away! Do you know where he patrols?"\n<br> "Uh... Not really, but I saw him leaving in the direction of the stable. But you won't tell me what's going on, you're worrying me."	dialogue
+119	9	6	"He's gone into the mill next door. What's going on?"\n<br> "Yes, of course I do! It's hard to forget such a tragedy... "\n<br> "Do you remember that it was the trader who, accompanied by his henchmen, killed my parents and kidnapped Erik?"\n<br> "Yes..." he answers with a frown.\n<br> "They're back!"	dialogue
+121	9	8	"How?"\n<br> "Yes, I saw them in the tavern. The loan shark is wearing a hood, but I recognized him."\n<br> "Are you sure?"\n<br> "Of course. I'll never forget him! His face is engraved in my memory!"\n<br> "I believe you." \n<br> Then he adds, "You know what? I'll leave you with George, and I'll go to the tavern right away."\n<br> "Very well."	dialogue
+122	9	9	Without waiting, he turns and heads off in the direction of the bandits.\nI continue towards the mill and see the sergeant in the distance, accompanied by one of his men.\nWe have to move fast. I don't know what they're up to or what might happen. And most of all, I'm just thinking about it now, but...Arthur... I hope he doesn't put his life in danger...\nAfter a minute of running, I'm close enough for them to hear me call the sergeant's name.\nHe quickly joins me, worried, while I'm out of breath.	thought
+123	9	10	"Emma! You worry me! What's going on?"\n<br> "The murderer of my parents has returned to the village!"\n<br> "What?"\n<br> "Yes, and he's accompanied by some men, including... Erik."	dialogue
+125	9	12	"Where are they?"\n<br> "At the tavern. Arthur is already on his way."\n<br> "Let's go!"	dialogue
+126	9	13	The sergeant, the man who accompanied him, and I run in the direction of the Grand-Place.\n<br> I'm out of breath, but I can't stop. I feel a mixture of fear, anxiety, and an emotion that I find hard to describe, but that would be similar to feeling lost.	thought
+127	9	14	"Did Erik recognize you?"\n<br> "No. Our eyes met, but nothing more."\n<br> "Obviously. As far as he's concerned, you died in the fire in your old house. Your existence is impossible for Erik."\n<br> "I understand, yes, but why did he stay with the trader?"\n<br> "I don't know. But don't forget, he was 9 years old. He was a child, certainly terrorized. And they probably brainwashed him."	dialogue
+128	9	15	I nod. I understand, even though I don't like it. \n<br> A few minutes later, we arrived at the Grand-Place and felt a commotion coming from the tavern.\n<br> We accelerate to get as close as possible. We feel a strange tension.\n<br> We abruptly open the tavern doors and rush in. We see a crowd in the middle. Have the bandits been caught?\n<br> As the sergeant approaches, people move aside to let him pass.\n<br> As I <approach the center, I see several pools of blood, and I scream as I see Arthur on the ground, a dagger in his stomach.	thought
+129	10	1	I decide to follow my brother. I'm a bit embarrassed; it's a very strange situation, but I have to do something.\n<br> I wait by the toilet for him to come out. \n<br> My heart is racing. How strange to be about to talk to someone you thought had been dead for 10 years.\n<br>My brother emerges from the bathroom and faces me as I try to talk to him.	thought
+130	10	2	"Um... How can I put this..."\n<br> "Well, my pretty! You like me so much you're ready to join me in the bathroom. Don't worry, come with me, we'll have a great time!"	dialogue
+132	10	4	"No... Uh... I didn't come for that. I... I need to talk to you."\n"What do you want?" he asks.	dialogue
+134	10	6	"I... I'd like to know..." I struggle to order my thoughts. "I'd like to know your name."	dialogue
+140	10	12	"What do you want?" he asks in a harsh voice.\n<br> "Um... It's me, I'm Emma, your twin sister..."	dialogue
+141	10	13	With one blow, he grabs my throat and slams me against the wall. \n<br>I can feel my breathing getting harder, a bit like a rope trying to fit through a hole that isn't big enough.	thought
+145	10	17	I can't get enough air into my lungs, and I start to panic as my head spins.\n<br> Suddenly, the man in the hood appears.	thought
+1	0	1	Ten years ago, twins Emma and Erik lived peacefully with their parents not far from their home village, in a hut in the forest. <br> It may have been small, but they received a lot of love from their parents. And so, until the age of 9, they lived happily and carefree, completely unaware of the problems of adulthood. <br> Although everything seemed fine to them, their parents were worried. Their father couldn't make enough money to support them. Despite his hard work...	narration
+10	1	5	Emma leaves the small cottage located in the forest, not far from the village. She starts walking on the grass, slowly slaloming between the trees. This proximity to nature does her good. <br> After a few minutes, she reaches the outskirts of the village and begins to meet some people who greet her warmly. <br> Since the tragedy that made her the only survivor of her family, Emma has become the village's darling. Her parent's burned cabin was graciously rebuilt by the inhabitants. <br> Arthur the blacksmith, a former soldier in the king's army, gave her a dagger to defend herself if needed. He even regularly gave her combat lessons over the years. Today, she can fight relatively well with bare hands, but especially, armed with that famous dagger she always keeps with her, Emma is formidable. <br> For his part, the trader was forced to move away, away from the outraged villagers who wanted his life. <br> As she approaches the town center, the villagers become more and more numerous, going about their business. <br> Arriving near the bakery, she spots a young man she doesn't know. Their eyes briefly meet. He seems to be between 18 and 20 years old. He continues on his way without paying attention to her. Emma continues hers too, but she is troubled.	narration
+33	4	5	On the other side of the stream, about fifteen meters away, she sees a man she doesn't know. <br> He hasn't seen her, probably because she's standing still. He looks to be in his forties, looking for something near the trees. \n<br> At first glance, he looks like a bandit. \n<br> Emma starts to get scared and looks at him, motionless.	narration
+39	5	4	Gathering her courage, she opens the wooden doors and enters, thinking she'll only be there for a short time. \n<br> She lets her eyes adjust to the change in light for a few moments, then observes. \n<br> A number of men are already sipping their drinks. \nThe only woman is Mrs. Wilkinson, standing next to her husband at the bar, serving pints of beer and whiskies that make Emma nauseous. \n<br> She looks around at all these people, seated at their tables or standing at the bar, and searches for the young man. \n<br> After a few moments, she catches sight of him, and their eyes meet for a moment as she looks down.	narration
+116	9	3	Without taking the time to answer, I let out a "Sorry" and set off in the direction of the north of the village, where the stable, the forge and the tannery are located. That's not such a bad thing, because that's where I'll find the strongest men in the village.\n<br> I pass a few passers-by who look at me, surprised, without really understanding what's happening to me. Some call out to me or simply say hello, but I don't take the time to reply, too focused on the seriousness of the situation.\n<br> Something serious is going on, I'm sure of it!\n<br> I go on like this for a few minutes, then I see Arthur, the blacksmith, a little further on. That calmed me down. He's probably the most trusted person in the village. \n<br> From a distance he says, "Emma, are you all right?"	dialogue
+67	7	1	I'm tetanized. I'm so afraid he'll see me that I try to be as quiet as possible.\n<br> At the same time, the more time I spend in his field of vision, the greater the chance that he will see me.\n<br> I try to breathe slowly and not move. My heart is beating so fast that I feel like the whole forest can hear it.\n<br> Meanwhile, I look at this man who seems to be looking for something, but what?\n<br> I see him digging in the bushes and at the base of the trees. Sometimes he sticks his knife into the ground, but it seems to be in vain.\n<br> Maybe he's trying to find something he's hidden here... or that someone else has hidden...\n<br> He straightens up, annoyed that he can't find what he's looking for. He paces back and forth, disappointed, and seems to be thinking.\n<br> At some point he notices me and I hiccup with surprise, or rather fear.\n<br> For his part, he's wide-eyed and motionless in surprise.\n<br> I can tell he's surprised for two reasons. The first is that he didn't expect to see me. The second is that I seem to have been there for a while, and he thinks that not only have I been watching him for a long time, but since I haven't moved, I don't seem to be afraid of him, which is the exact opposite of the truth.\n<br> Time seems to have stopped, as if our brains have stopped working for a moment.\n<br> I can see him coming to his senses. He's going to attack me for sure.\n<br> I suddenly get up to run, but out of the corner of my eye I see him running across the stream. With fear in my stomach, I run to try and escape him. I try to run as fast as I can, slaloming through the trees, hoping to reach the village and be safe. I turn my head briefly to see where he is, and my heart skips a beat when I realize he's catching up to me. I try to speed up, but I can't. I have to get to the Grand-Place; surely someone will be able to help me if they see us. And above all...\n<br> I stumbled over an exposed root and roll on the grass and dirt. I try to get up quickly while the bandit has practically caught up with me. I try to push myself to run, but he comes at me and lands a shoulder shot, knocking us both to the ground.\n<br> He's faster than me and straddles me, wrapping his knees around me. Without waiting, he gives me a huge slap that makes me scream. My face hurts badly.	thought
+90	8	1	I'm tetanized. I'm so afraid he'll see me if I move. And at the same time, if I just stand there, he'll definitely see me.\n<br> I have to leave as soon as possible, as discreetly as possible.\n<br> I see him digging in the bushes and at the base of the trees. Sometimes he sticks his knife into the ground, but it seems to be in vain.\n<br> Sometimes he faces me without noticing, sometimes not. I can only move when his back is to me; if I move when I'm in his field of vision, he's sure to see it. \n<br> He straightens up, annoyed that he can't find what he's looking for. My heart is pounding.\n<br> At some point he stops, standing backwards with his hands on his hips.\n<br> Now is the time.\n<br> I stand up discreetly and take my first step around the tree I was leaning against. But with my second step I break a dry branch.\n<br> I look at him, my heart pounding, as he turns to me. \n<br> He looks angry and starts to cross the stream to catch up with me. \n<br> With fear in my stomach, I run to try and escape him. I try to run as fast as I can, slaloming through the trees, hoping to reach the village and be safe. I turn my head briefly to see where he is, and my heart skips a beat when I realize he's catching up to me. I try to speed up, but I can't. I have to get to the Grand-Place; surely someone will be able to help me if they see us. And above all...\n<br> I stumbled over an exposed root and roll on the grass and dirt. I try to get up quickly while the bandit has practically caught up with me. I try to push myself to run, but he comes at me and lands a shoulder shot, knocking us both to the ground.\n<br> He's faster than me and straddles me, wrapping his knees around me. Without waiting, he gives me a huge slap that makes me scream. My face hurts badly.	thought
+106	8	17	With a slow shake of my head, I answer in the negative.\n<br> Then, with an effort that seems considerable, I murmur, "On the way home, a bandit in the forest, near the stream..."\n<br> Arthur frowns. The sergeant, who was close enough to hear, immediately sets off in the direction of the stream.\n<br> Leaning close to my ear, Arthur says, "I'd rather you hadn't experienced this horror, but I'm glad I taught you how to use a dagger..."\n<br> Then a group of three men approach. But strangely, I don't recognize them. They're not from here.\n<br> Suddenly, I recognize one of them, the young man from earlier. He looks at me, intrigued, while I look back.\n<br> Then, looking more closely at the others, I recognize the second man, the one who had joined him before they entered the tavern together. The last man is wearing a cloak and a hood. His face is barely visible, except for a short beard.\n<br> The blacksmith looks at them suspiciously.\n<br> The one who looks like my brother looks briefly at the man in the hood, just long enough for him to nod slightly. As if he were the chef.\n<br> So the boy takes a step forward.	thought
+114	9	1	I quickly leave the tavern.\n<br> I'm deeply troubled. \n<br> On one hand, seeing my brother again, who I thought was dead, moves me terribly.\n<br> On the other hand, seeing the murderer of my parents again makes me sick.\n<br> I feel attacked by contradictory emotions and I'm in a state of turmoil.\n<br> I cross the Grand-Place and walk towards Sergeant Georges' house. If he's not on patrol, he'll surely be there.\n<br> But what is this story? Why would the trader reappear now?\n<br> Besides, what does my brother have to do with him? Why was he kidnapped ten years ago?\n<br> It's so strange...\n<br> After a few minutes, I arrive in front of Georges' house.\n<br> Without waiting, I knock on the door. We must act quickly. The more I think about it, the more I see only one reason why bandits would be present in our village: to commit a terrible misdeed.\n<br> And for the trader to risk coming back here, he must really be up to no good.\n<br> The door opens to reveal George's wife.	thought
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (user_id, username, password, email, created_at, last_loggedin) FROM stdin;
+1	Mike	123456	mt.mail.mt@gmail.com	2023-08-03 15:25:51.349891	\N
+2	Mika	123456	mika@gmail.com	2023-08-03 15:25:51.349891	\N
+3	Micky	123456	micky@gmail.com	2023-08-03 15:25:51.349891	\N
+4	MickTweet	$2b$10$JvGks7gF57tEcH76MiRH0OmQpZ/zQuVrbti5l3QLFwdPwdOfMZv9q	tweet@gmail.com	2023-08-07 10:23:47.133386	\N
+5	bigboss	$2b$10$goAuimmjtmY6MLei..r5Z.Ckfck6M2gfYn4rKQU4FXHsFOkfLRVyG	bigboss@gmail.com	2023-08-07 10:28:13.836694	\N
+6	boss	$2b$10$glupDk.m0mTrWwUPoU0zG.07vxaxo.RE0aLND9s3.dvFsB8USjnie	boss@gmail.com	2023-08-07 10:31:18.645603	\N
+7	boss1	$2b$10$NSCSMsght.g4GO6u.KkwOuJsc662JXDbd1mT3FHBGP44.2RCrHTWC	boss1@gmail.com	2023-08-07 10:46:28.984875	\N
+8	boss2	$2b$10$sA4qTfoHRP.opo5/KpunuOwThBW7SknA9h8OamclTUEc6945KKmoW	boss2@gmail.com	2023-08-07 10:55:45.353947	\N
+9	boss3	$2b$10$Hakn33u9lZAycP/R3zImqOGZtnfrAeIYOStvrI4vwGPDrzhU3iZ4u	boss3@gmail.com	2023-08-07 11:45:40.2473	\N
+10	NewMike	$2b$10$vL24Ja5lParLNsBmxWtLc.7MWYIqZ2vQ.C4Y/32UvY41jjxuC6jZW	mt.mail.mt@gmail.com	2023-08-18 15:30:35.802031	\N
+11	Mike2	$2b$10$HPbwgArQXA5Dh32CcoLtcuulNJ71nKXgWdmub0m5tj3b9HdcMIrnG	mt.mail.mt@gmail.com	2023-08-18 15:37:45.032934	\N
+12	sandy	$2b$10$es5NbjUsjEdAb.IhTt3JDO9DLAa4pn/E5TLyWwNouS1I5pVBAYSUO	sandrinelancart@gmail.com	2023-08-18 16:07:01.992141	\N
+13	sandrine	$2b$10$Ds2DaTQEyuf0FUc1yIDbt.BesLsCot.4lCAMHjQiLm7nGDLGsfFmS	sandrinelancart@gmail.com	2023-08-18 16:08:37.342289	\N
+\.
+
+
+--
+-- Name: choices_table_choice_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.choices_table_choice_id_seq', 1, false);
+
+
+--
+-- Name: passages_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.passages_table_id_seq', 147, true);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 13, true);
+
+
+--
+-- Name: choices_table choices_table_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.choices_table
+    ADD CONSTRAINT choices_table_pkey PRIMARY KEY (choice_id);
+
+
+--
+-- Name: passages_table passages_table_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.passages_table
+    ADD CONSTRAINT passages_table_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: choices_table choices_table_passage_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.choices_table
+    ADD CONSTRAINT choices_table_passage_id_fkey FOREIGN KEY (passage_id) REFERENCES public.passages_table(id);
+
+
+--
+-- Name: choices_table choices_table_passage_id_next_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.choices_table
+    ADD CONSTRAINT choices_table_passage_id_next_fkey FOREIGN KEY (passage_id_next) REFERENCES public.passages_table(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

@@ -107,6 +107,32 @@ app.get('/passages', async (req, res) => {
       res.status(500).json({ error: 'Something went wrong' });
     }
   });
+
+  app.get('/options', async (req, res) => {
+    try {
+        const allChoices = await db('choices_table').select();
+        res.json(allChoices);
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur lors de la récupération de tous les choix.' });
+    }
+});
+
+
+  app.get('/options/:choiceId', async (req, res) => {
+    try {
+        const { choiceId } = req.params;
+        console.log("Fetching choice for ID:", choiceId.split(','));
+        const choice = await db('choices_table').whereIn( 'choice_id', choiceId.split(',') );
+        console.log("Retrieved choice:", choice);
+
+        res.json(choice);
+    } catch (error) {
+      console.log(error);
+        res.status(500).json({ error: 'Erreur lors de la récupération du choix.' });
+    }
+});
+
+
   
 const port = 3000;
 
