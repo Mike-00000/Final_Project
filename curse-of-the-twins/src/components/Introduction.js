@@ -235,7 +235,7 @@ const Introduction = (props) => {
               setCurrentIllustration(illustrations[passageId + 1]);
             }
             setPassageId((prevPassageId) => prevPassageId + 1);
-          }, 4000);
+          }, 6000);
         } else {
           // It's the last passage of the introduction, show the "Next" button
           setShowNextButton(true);
